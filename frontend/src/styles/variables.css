@@ -1,0 +1,47 @@
+:root {
+  --color-primary: #c9962e;
+  --color-primary-dark: #a87818;
+  --color-primary-light: #f7ecd6;
+  --color-gold-soft: #fbf7ef;
+
+  --color-black: #121212;
+  --color-dark: #181818;
+  --color-dark-soft: #242424;
+  --color-white: #ffffff;
+  --color-off-white: #f8f6f1;
+  --color-light: #f5f3ee;
+  --color-light-gray: #eeeeea;
+
+  --color-text: #202020;
+  --color-gray: #6f6c65;
+  --color-gray-light: #a7a39a;
+  --color-muted: #77736b;
+  --color-border: #e4e0d7;
+
+  --font-primary: "Inter", "Segoe UI", Arial, sans-serif;
+  --font-body: var(--font-primary);
+
+  --container-width: 1280px;
+  --section-padding: 105px;
+  --section-padding-mobile: 65px;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 12px 35px rgba(17, 17, 17, 0.08);
+  --shadow-card: 0 14px 40px rgba(17, 17, 17, 0.08);
+  --shadow-md: 0 18px 45px rgba(17, 17, 17, 0.12);
+  --shadow-lg: 0 28px 70px rgba(17, 17, 17, 0.16);
+  --shadow-hover: 0 22px 55px rgba(17, 17, 17, 0.16);
+
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-slow: 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+
+  --z-header: 1000;
+  --z-dropdown: 1100;
+  --z-modal: 2000;
+}
