@@ -7,7 +7,7 @@ function ManageInquiries() {
       title="Contact Inquiries"
       description="Messages submitted through the Contact form, live as they arrive."
       collection="inquiries"
-      columns={["name", "email", "subject", "status"]}
+            columns={["name", "email", "phone", "subject", "status"]}
       fields={[
         { key: "name", label: "Name" },
         { key: "email", label: "Email" },

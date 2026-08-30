@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import "./admin.css";
 
 function AdminLogin() {
-  const { isAuthed, login } = useAuth();
+  const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -15,7 +15,7 @@ function AdminLogin() {
   const [isLoading, setIsLoading] = useState(false);
 
   // If already logged in, go to the admin dashboard
-  if (isAuthed) {
+  if (isAuthenticated) {
     return <Navigate to="/admin" replace />;
   }
 
@@ -26,16 +26,14 @@ function AdminLogin() {
     setIsLoading(true);
 
     try {
-      const result = await login(email.trim(), password);
+      // login() resolves with { success: true, ... } on success,
+      // and throws an Error (with a readable .message) on failure.
+      await login(email.trim(), password);
 
-      if (result.ok) {
-        navigate("/admin", { replace: true });
-      } else {
-        setError(result.error || "Invalid email or password.");
-      }
+      navigate("/admin", { replace: true });
     } catch (err) {
       console.error("Admin login error:", err);
-      setError("Something went wrong. Please try again.");
+      setError(err.message || "Invalid email or password.");
     } finally {
       setIsLoading(false);
     }

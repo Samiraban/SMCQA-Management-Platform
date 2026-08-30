@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { createInquiry } from "../lib/api.js";
+import countryCodes from "../data/countryCodes.js";
 import "../styles/Contact.css";
+
+const DEFAULT_DIAL_CODE = "+974"; // Qatar — matches the office location below
 
 const EMPTY = {
   name: "",
   email: "",
-  phone: "",
+  dialCode: DEFAULT_DIAL_CODE,
+  localPhone: "",
   message: "",
 };
 
@@ -21,18 +25,26 @@ function Contact() {
 
     setSent(false);
     setError("");
+
+    const digitsOnly = form.localPhone.replace(/[^\d]/g, "");
+
+    if (digitsOnly.length < 6) {
+      setError("Please enter a valid phone number.");
+      return;
+    }
+
     setSending(true);
 
     try {
       await createInquiry({
         name: form.name.trim(),
         email: form.email.trim(),
-        phone: form.phone.trim(),
+        phone: `${form.dialCode} ${digitsOnly}`,
         message: form.message.trim(),
       });
 
       setSent(true);
-      setForm({ ...EMPTY });
+      setForm(EMPTY);
     } catch (err) {
       console.error("Contact submission failed:", err);
       setError(
@@ -136,14 +148,32 @@ function Contact() {
                 <label htmlFor="contact2-phone">
                   Phone <span className="required">*</span>
                 </label>
-                <input
-                  id="contact2-phone"
-                  type="tel"
-                  placeholder="Phone"
-                  required
-                  value={form.phone}
-                  onChange={(e) => updateField("phone", e.target.value)}
-                />
+
+                <div className="contact2-phone-row">
+                  <select
+                    id="contact2-dial-code"
+                    value={form.dialCode}
+                    onChange={(e) => updateField("dialCode", e.target.value)}
+                    aria-label="Country code"
+                  >
+                    {countryCodes.map((country) => (
+                      <option key={country.iso} value={country.dialCode}>
+                        {country.name} ({country.dialCode})
+                      </option>
+                    ))}
+                  </select>
+
+                  <input
+                    id="contact2-phone"
+                    type="tel"
+                    placeholder="Phone number"
+                    required
+                    value={form.localPhone}
+                    onChange={(e) =>
+                      updateField("localPhone", e.target.value)
+                    }
+                  />
+                </div>
               </div>
 
               <div className="contact2-field">

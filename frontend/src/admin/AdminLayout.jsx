@@ -8,6 +8,7 @@ import {
   UserSquare2,
   FileText,
   Inbox,
+  Star,
   Settings,
   LogOut,
   Menu,
@@ -26,6 +27,7 @@ const NAV = [
   { to: "/admin/jobs", label: "Jobs", icon: Briefcase },
   { to: "/admin/applicants", label: "Applicants", icon: Users },
   { to: "/admin/blog", label: "Blog", icon: FileText },
+  { to: "/admin/reviews", label: "Reviews", icon: Star },
   { to: "/admin/inquiries", label: "Inquiries", icon: Inbox },
   { to: "/admin/content", label: "Site Content", icon: Settings },
 ];

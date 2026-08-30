@@ -358,6 +358,34 @@ function EnquiryForm() {
   );
 }
 
+/*
+ * Turns an admin-edited stat string like "20K+" into the pieces
+ * <CountUp> needs: a numeric value to animate from 0, and the
+ * trailing suffix ("K+", "+", etc.) to display after it.
+ * Falls back to fallbackValue/fallbackSuffix when nothing has
+ * been saved in the admin panel yet.
+ */
+function parseStat(raw, fallbackValue, fallbackSuffix) {
+  const str = typeof raw === "string" ? raw.trim() : "";
+
+  if (!str) {
+    return { value: fallbackValue, suffix: fallbackSuffix };
+  }
+
+  const match = str.match(/^([\d,.]+)\s*(.*)$/);
+
+  if (!match) {
+    return { value: fallbackValue, suffix: fallbackSuffix };
+  }
+
+  const numeric = parseFloat(match[1].replace(/,/g, ""));
+
+  return {
+    value: Number.isFinite(numeric) ? numeric : fallbackValue,
+    suffix: match[2] || fallbackSuffix,
+  };
+}
+
 /* =========================================================
    HOME
    ========================================================= */
@@ -365,6 +393,18 @@ function EnquiryForm() {
 function Home() {
   const navigate = useNavigate();
   const team = useCollection("team");
+  const reviews = useCollection("reviews");
+  const siteContent = useCollection("siteContent");
+
+  const stats = siteContent?.stats || {};
+  const peopleRecruited = parseStat(stats.peopleRecruited, 20, "K+");
+  const happyClients = parseStat(stats.happyClients, 20, "K+");
+  const industryExperts = parseStat(stats.industryExperts, 500, "+");
+  const globalLocations = parseStat(stats.globalLocations, 7, "+");
+
+  // Live customer reviews approved by the admin, falling back to the
+  // built-in testimonials only until the first real review is approved.
+  const liveTestimonials = reviews.length > 0 ? reviews : testimonials;
 
   /*
    * Always show the real client logos here,
@@ -413,19 +453,19 @@ function Home() {
               </a>
             </div>
 
-            <div className="hero-trust">
+                       <div className="hero-trust">
               <div>
-                <strong>20K+</strong>
+                <strong>{stats.peopleRecruited || "20K+"}</strong>
                 <span>People Recruited</span>
               </div>
 
               <div>
-                <strong>500+</strong>
+                <strong>{stats.industryExperts || "500+"}</strong>
                 <span>Industry Experts</span>
               </div>
 
               <div>
-                <strong>7+</strong>
+                <strong>{stats.globalLocations || "7+"}</strong>
                 <span>Global Locations</span>
               </div>
             </div>
@@ -730,24 +770,24 @@ function Home() {
 </h2>
           </div>
 
-          <div className="stats-grid reveal-group">
+                   <div className="stats-grid reveal-group">
             <div className="big-stat">
-              <CountUp value={20} suffix="K+" />
+              <CountUp value={peopleRecruited.value} suffix={peopleRecruited.suffix} />
               <span>People Recruited</span>
             </div>
 
             <div className="big-stat">
-              <CountUp value={20} suffix="K+" />
+              <CountUp value={happyClients.value} suffix={happyClients.suffix} />
               <span>Happy Clients</span>
             </div>
 
             <div className="big-stat">
-              <CountUp value={500} suffix="+" />
+              <CountUp value={industryExperts.value} suffix={industryExperts.suffix} />
               <span>Industry Experts</span>
             </div>
 
             <div className="big-stat">
-              <CountUp value={7} suffix="+" />
+              <CountUp value={globalLocations.value} suffix={globalLocations.suffix} />
               <span>Global Locations</span>
             </div>
           </div>
@@ -1002,11 +1042,11 @@ function Home() {
               </p>
             </div>
 
-            <div className="testimonial-list">
-              {testimonials.map((testimonial, index) => (
+                       <div className="testimonial-list">
+              {liveTestimonials.map((testimonial, index) => (
                 <article
                   className="testimonial-card"
-                  key={testimonial.name}
+                  key={testimonial.id || testimonial.name}
                 >
                   <div className="testimonial-number">
                     0{index + 1}

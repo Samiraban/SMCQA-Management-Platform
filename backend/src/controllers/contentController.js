@@ -16,6 +16,7 @@ const VALID_COLLECTIONS =
     "inquiries",
     "chats",
     "siteContent",
+    "reviews",
   ]);
 
 const seedData = {
@@ -231,6 +232,36 @@ const seedData = {
     },
   ],
 
+  reviews: [
+    {
+      id: "r1",
+      name: "Mohammad Osman Gani",
+      rating: 5,
+      text:
+        "I feel I have put my documents on the right place. Very fantastic service.",
+      approved: true,
+      submittedAt: Date.now(),
+    },
+    {
+      id: "r2",
+      name: "Sobit Magar",
+      rating: 5,
+      text:
+        "Very comfortable and supportive environment throughout the process.",
+      approved: true,
+      submittedAt: Date.now(),
+    },
+    {
+      id: "r3",
+      name: "Shfiq Miya",
+      rating: 5,
+      text:
+        "Very fantastic work experience and professional support.",
+      approved: true,
+      submittedAt: Date.now(),
+    },
+  ],
+
   siteContent: {
     heroTitle:
       "Building the workforce that builds the future.",
@@ -238,6 +269,12 @@ const seedData = {
       "Connecting organisations with reliable manpower and helping talented people discover meaningful opportunities.",
     aboutText:
       "Star Management Consultancy is a Human Resource and Hospitality Services provider focused on connecting organisations with the people they need to grow.",
+    stats: {
+      peopleRecruited: "20K+",
+      happyClients: "20K+",
+      industryExperts: "500+",
+      globalLocations: "7+",
+    },
   },
 };
 
@@ -256,6 +293,7 @@ export async function seedDefaults() {
       "clients",
       "jobs",
       "blog",
+      "reviews",
     ]
   ) {
     const count =
@@ -371,12 +409,19 @@ export async function getCollection(
       });
     }
 
+    let results = documents.map(serialize);
+
+    // Visitors on the public site should never see a review
+    // before an admin has approved it — only the admin panel
+    // (a non-public request) can see everything.
+    if (collection === "reviews" && req.isPublicRequest) {
+      results = results.filter((item) => item.approved === true);
+    }
+
     return res.json({
       success: true,
-      count: documents.length,
-      data: documents.map(
-        serialize
-      ),
+      count: results.length,
+      data: results,
     });
   } catch (error) {
     console.error(
@@ -459,6 +504,28 @@ export async function createCollectionItem(
     if (collection === "chats") {
       data.sentAt ||=
         Date.now();
+    }
+
+    if (collection === "reviews") {
+      data.submittedAt ||=
+        Date.now();
+
+      // Reviews created by the public (customers) are never
+      // auto-approved. Only an admin edit through the admin
+      // panel can flip this to true, so nothing shows on the
+      // live site until an admin has checked it.
+      if (typeof data.approved !== "boolean") {
+        data.approved = false;
+      }
+
+      const parsedRating = Number(data.rating);
+
+      data.rating =
+        Number.isFinite(parsedRating) &&
+        parsedRating >= 1 &&
+        parsedRating <= 5
+          ? Math.round(parsedRating)
+          : 5;
     }
 
     const document =

@@ -153,6 +153,21 @@ export const editTeamMember = (id, data) =>
 
 export const deleteTeamMember = (id) =>
   deleteItem("team", id);
+/* =========================================================
+   REVIEWS
+========================================================= */
+
+export const getReviews = () =>
+  getCollection("reviews");
+
+export const createReview = (data) =>
+  createItem("reviews", data);
+
+export const editReview = (id, data) =>
+  updateItem("reviews", id, data);
+
+export const deleteReview = (id) =>
+  deleteItem("reviews", id);
 
 /* =========================================================
    CLIENTS

@@ -45,6 +45,7 @@ const publicCreateCollections = new Set([
   "inquiries",
   "applicants",
   "chats",
+  "reviews",
 ]);
 
 /*
@@ -69,6 +70,26 @@ Other collections require authentication.
 router.get("/:collection", async (req, res, next) => {
   try {
     const collection = req.params.collection;
+
+    // REVIEWS: public visitors can read the approved reviews (no
+    // login needed, e.g. the homepage testimonials section), while
+    // the admin panel sends a Bearer token and gets every review
+    // (approved AND pending) so it can moderate them.
+    if (collection === "reviews") {
+      const authHeader = req.headers.authorization;
+
+      if (authHeader && authHeader.startsWith("Bearer ")) {
+        return protect(req, res, () => {
+          return adminOnly(req, res, () => {
+            return getCollection(req, res);
+          });
+        });
+      }
+
+      req.isPublicRequest = true;
+
+      return getCollection(req, res);
+    }
 
     // PUBLIC COLLECTION
     if (publicGetCollections.has(collection)) {
@@ -95,6 +116,7 @@ Public:
 POST /api/content/inquiries
 POST /api/content/applicants
 POST /api/content/chats
+POST /api/content/reviews
 
 Admin:
 Everything else.

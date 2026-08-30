@@ -15,6 +15,12 @@ const EMPTY_CONTENT = {
   heroTitle: "",
   heroSubtitle: "",
   aboutText: "",
+  stats: {
+    peopleRecruited: "",
+    happyClients: "",
+    industryExperts: "",
+    globalLocations: "",
+  },
 };
 
 function ManageContent() {
@@ -25,6 +31,10 @@ function ManageContent() {
     useState({
       ...EMPTY_CONTENT,
       ...content,
+      stats: {
+        ...EMPTY_CONTENT.stats,
+        ...(content?.stats || {}),
+      },
     });
 
   const [saved, setSaved] =
@@ -40,8 +50,22 @@ function ManageContent() {
     setForm({
       ...EMPTY_CONTENT,
       ...content,
+      stats: {
+        ...EMPTY_CONTENT.stats,
+        ...(content?.stats || {}),
+      },
     });
   }, [content]);
+
+  function updateStat(key, value) {
+    setForm((current) => ({
+      ...current,
+      stats: {
+        ...current.stats,
+        [key]: value,
+      },
+    }));
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -80,9 +104,9 @@ function ManageContent() {
           <h1>Site Content</h1>
 
           <p>
-            Edit homepage and about page
-            copy — changes are saved to the
-            database.
+            Edit homepage copy and the "Experience you can build on" stats
+            — changes save to the database and update the live site
+            automatically within a few seconds.
           </p>
         </div>
       </div>
@@ -152,6 +176,68 @@ function ManageContent() {
                   e.target.value,
               })
             }
+            disabled={saving}
+          />
+        </div>
+
+        <h3 style={{ margin: "8px 0 0" }}>
+          Homepage stats
+        </h3>
+        <p
+          style={{
+            margin: "-6px 0 4px",
+            fontSize: 13,
+            color: "var(--color-gray)",
+          }}
+        >
+          Type the number exactly as it should appear, e.g. "20K+", "500+",
+          "7+". This updates every matching number shown on the homepage.
+        </p>
+
+        <div>
+          <label>People Recruited</label>
+          <input
+            value={form.stats.peopleRecruited}
+            onChange={(e) =>
+              updateStat("peopleRecruited", e.target.value)
+            }
+            placeholder="20K+"
+            disabled={saving}
+          />
+        </div>
+
+        <div>
+          <label>Happy Clients</label>
+          <input
+            value={form.stats.happyClients}
+            onChange={(e) =>
+              updateStat("happyClients", e.target.value)
+            }
+            placeholder="20K+"
+            disabled={saving}
+          />
+        </div>
+
+        <div>
+          <label>Industry Experts</label>
+          <input
+            value={form.stats.industryExperts}
+            onChange={(e) =>
+              updateStat("industryExperts", e.target.value)
+            }
+            placeholder="500+"
+            disabled={saving}
+          />
+        </div>
+
+        <div>
+          <label>Global Locations</label>
+          <input
+            value={form.stats.globalLocations}
+            onChange={(e) =>
+              updateStat("globalLocations", e.target.value)
+            }
+            placeholder="7+"
             disabled={saving}
           />
         </div>

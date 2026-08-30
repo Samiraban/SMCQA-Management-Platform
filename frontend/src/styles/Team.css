@@ -86,9 +86,9 @@
 ========================================================= */
 
 .team2-grid {
-  display: grid;
-
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 
   gap: 30px;
 
@@ -96,6 +96,11 @@
   max-width: 1500px;
 
   margin: 0 auto;
+}
+
+.team2-grid .team2-card {
+  flex: 1 1 340px;
+  max-width: calc(33.333% - 20px);
 }
 
 /* =========================================================
@@ -252,12 +257,14 @@
     padding: 70px 0 90px;
   }
 
-  .team2-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-
+   .team2-grid {
     max-width: 900px;
 
     gap: 28px;
+  }
+
+  .team2-grid .team2-card {
+    max-width: calc(50% - 14px);
   }
 
   .team2-photo {
@@ -286,14 +293,16 @@
     margin-bottom: 40px;
   }
 
-  .team2-grid {
-    grid-template-columns: 1fr;
-
+    .team2-grid {
     max-width: 430px;
 
     margin: 0 auto;
 
     gap: 28px;
+  }
+
+  .team2-grid .team2-card {
+    max-width: 100%;
   }
 
   .team2-photo {

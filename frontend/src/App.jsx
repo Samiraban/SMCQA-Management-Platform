@@ -25,6 +25,7 @@ import ManageClients from "./admin/pages/ManageClients.jsx";
 import ManageJobs from "./admin/pages/ManageJobs.jsx";
 import ManageApplicants from "./admin/pages/ManageApplicants.jsx";
 import ManageBlog from "./admin/pages/ManageBlog.jsx";
+import ManageReviews from "./admin/pages/ManageReviews.jsx";
 import ManageInquiries from "./admin/pages/ManageInquiries.jsx";
 import ManageContent from "./admin/pages/ManageContent.jsx";
 
@@ -60,7 +61,8 @@ function App() {
           <Route path="clients" element={<ManageClients />} />
           <Route path="jobs" element={<ManageJobs />} />
           <Route path="applicants" element={<ManageApplicants />} />
-          <Route path="blog" element={<ManageBlog />} />
+                    <Route path="blog" element={<ManageBlog />} />
+          <Route path="reviews" element={<ManageReviews />} />
           <Route path="inquiries" element={<ManageInquiries />} />
           <Route path="content" element={<ManageContent />} />
         </Route>
