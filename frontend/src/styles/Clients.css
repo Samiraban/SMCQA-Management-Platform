@@ -1,0 +1,233 @@
+/* =========================================================
+   CLIENTS PAGE — matches reference design (smcqa.com/our-clients)
+   ========================================================= */
+
+.clients2-page h1,
+.clients2-page h2,
+.clients2-page h3,
+.clients2-page h4 {
+  font-weight: 800;
+}
+
+.clients2-dark {
+  background: var(--color-black);
+  padding: 90px 0;
+}
+
+.clients2-light {
+  background: var(--color-white);
+  padding: 90px 0;
+}
+
+/* ---------- HERO ---------- */
+
+.clients2-hero {
+  position: relative;
+  height: 480px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clients2-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.55),
+    rgba(10, 10, 10, 0.78)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clients2-hero-overlay h1 {
+  color: var(--color-white);
+  font-size: clamp(36px, 6vw, 64px);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ---------- CENTER HEADINGS ---------- */
+
+.clients2-center-heading {
+  color: var(--color-white);
+  text-align: center;
+  margin-bottom: 46px;
+  font-size: clamp(28px, 3.5vw, 40px);
+}
+
+.clients2-heading-dark {
+  color: var(--color-text);
+}
+
+/* ---------- TAKE A LOOK AT OUR CLIENTS: COUNTRY GRID ---------- */
+
+.clients2-country-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.clients2-country-card {
+  background: #0c1a33;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 22px 26px;
+}
+
+.clients2-country-card h3 {
+  color: var(--color-primary);
+  text-transform: uppercase;
+  font-size: 17px;
+  letter-spacing: 0.5px;
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+  border-bottom: 2px solid var(--color-primary);
+  display: inline-block;
+}
+
+.clients2-country-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+}
+
+.clients2-country-card li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  color: #e7e5e0;
+  font-size: 14.5px;
+  line-height: 1.4;
+}
+
+.clients2-country-card li:last-child {
+  border-bottom: none;
+}
+
+.clients2-country-card li svg {
+  color: var(--color-primary);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* ---------- QATAR CLIENTS: LOGO GRID ---------- */
+
+.clients2-qatar {
+  padding-top: 0;
+}
+
+.clients2-logo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.clients2-logo-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.clients2-logo-card img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* ---------- OUR GLOBAL PRESENCE ---------- */
+
+.clients2-presence-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.clients2-presence-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 30px 20px;
+  text-align: center;
+}
+
+.clients2-presence-pin {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.clients2-presence-card h4 {
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.clients2-presence-card p {
+  font-size: 13.5px;
+  color: var(--color-gray);
+  line-height: 1.5;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 900px) {
+  .clients2-country-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .clients2-logo-grid,
+  .clients2-presence-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .clients2-hero {
+    height: 340px;
+  }
+
+  .clients2-dark,
+  .clients2-light {
+    padding: 60px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .clients2-country-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .clients2-logo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .clients2-presence-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .clients2-center-heading {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 420px) {
+  .clients2-logo-card {
+    height: 100px;
+    padding: 14px;
+  }
+}

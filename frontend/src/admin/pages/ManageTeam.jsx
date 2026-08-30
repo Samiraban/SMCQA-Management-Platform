@@ -8,9 +8,11 @@ function ManageTeam() {
       description="Shown live on the Our Team page."
       collection="team"
       fields={[
+        { key: "photo", label: "Photo", type: "image" },
         { key: "name", label: "Full name", required: true },
         { key: "role", label: "Role / title", required: true },
       ]}
+      columns={["photo", "name", "role"]}
       onCreate={createTeamMember}
       onUpdate={editTeamMember}
       onDelete={deleteTeamMember}

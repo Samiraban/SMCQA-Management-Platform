@@ -1,0 +1,328 @@
+/* =========================================================
+   OUR TEAM PAGE
+========================================================= */
+
+.team2-page h1,
+.team2-page h2,
+.team2-page h3 {
+  font-weight: 800;
+}
+
+/* =========================================================
+   OUR TEAM SECTION
+========================================================= */
+
+.team2-dark {
+  background: var(--color-black);
+  padding: 90px 0 110px;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.team2-hero {
+  position: relative;
+  height: 340px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team2-hero-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    100deg,
+    rgba(6, 12, 26, 0.35) 0%,
+    rgba(6, 12, 26, 0.55) 45%,
+    rgba(6, 12, 26, 0.88) 100%
+  );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team2-hero-overlay h1 {
+  color: var(--color-white);
+  font-size: clamp(32px, 5.5vw, 56px);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.team2-heading {
+  color: var(--color-white);
+  text-align: center;
+
+  font-size: clamp(30px, 3vw, 38px);
+
+  margin: 0 0 12px;
+}
+
+.team2-subheading {
+  color: #7dd3fc;
+  text-align: center;
+
+  font-weight: 700;
+  font-size: 15px;
+
+  max-width: 620px;
+
+  margin: 0 auto 55px;
+
+  line-height: 1.6;
+}
+
+/* =========================================================
+   TEAM GRID
+========================================================= */
+
+.team2-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 30px;
+
+  width: 100%;
+  max-width: 1500px;
+
+  margin: 0 auto;
+}
+
+/* =========================================================
+   TEAM CARD
+========================================================= */
+
+.team2-card {
+  background: var(--color-white);
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  box-shadow: var(--shadow-card);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.team2-card:hover {
+  transform: translateY(-6px);
+
+  box-shadow: var(--shadow-hover);
+}
+
+/* =========================================================
+   TEAM PHOTO
+========================================================= */
+
+.team2-photo {
+  width: 100%;
+
+  height: 380px;
+
+  overflow: hidden;
+
+  background: #e5e5e5;
+}
+
+.team2-photo img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  /* IMPORTANT:
+     Keeps the top of the photo visible,
+     preventing heads from being cropped */
+  object-position: center top;
+
+  transition: transform 0.5s ease;
+}
+
+/* =========================================================
+   INDIVIDUAL PHOTO POSITIONING
+========================================================= */
+
+/* TEAM MEMBER 1 */
+.team2-card:nth-child(1) .team2-photo img {
+  object-position: center top;
+}
+
+/* TEAM MEMBER 2 */
+.team2-card:nth-child(2) .team2-photo img {
+  object-position: center top;
+}
+
+/* TEAM MEMBER 3 */
+.team2-card:nth-child(3) .team2-photo img {
+  object-position: center top;
+}
+
+/* Hover effect */
+
+.team2-card:hover .team2-photo img {
+  transform: scale(1.03);
+}
+
+/* =========================================================
+   PHOTO FALLBACK
+========================================================= */
+
+.team2-photo-fallback {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--color-primary);
+  color: var(--color-white);
+
+  font-weight: 800;
+  font-size: 38px;
+
+  letter-spacing: 1px;
+}
+
+/* =========================================================
+   TEAM MEMBER INFORMATION
+========================================================= */
+
+.team2-info {
+  text-align: center;
+
+  padding: 24px 18px 28px;
+
+  min-height: 96px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.team2-info h3 {
+  color: var(--color-primary);
+
+  text-transform: uppercase;
+
+  font-size: 16px;
+
+  letter-spacing: 0.4px;
+
+  margin: 0 0 9px;
+
+  line-height: 1.4;
+}
+
+.team2-info span {
+  display: block;
+
+  color: var(--color-text);
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  font-size: 13px;
+
+  letter-spacing: 0.3px;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+  .team2-dark {
+    padding: 70px 0 90px;
+  }
+
+  .team2-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    max-width: 900px;
+
+    gap: 28px;
+  }
+
+  .team2-photo {
+    height: 380px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+  .team2-dark {
+    padding: 60px 0 80px;
+  }
+
+  .team2-heading {
+    font-size: 32px;
+  }
+
+  .team2-subheading {
+    font-size: 14px;
+
+    padding: 0 15px;
+
+    margin-bottom: 40px;
+  }
+
+  .team2-grid {
+    grid-template-columns: 1fr;
+
+    max-width: 430px;
+
+    margin: 0 auto;
+
+    gap: 28px;
+  }
+
+  .team2-photo {
+    height: 420px;
+  }
+
+  .team2-info {
+    padding: 24px 15px 28px;
+  }
+
+  .team2-info h3 {
+    font-size: 16px;
+  }
+
+  .team2-info span {
+    font-size: 13px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+  .team2-grid {
+    max-width: 100%;
+  }
+
+  .team2-photo {
+    height: 360px;
+  }
+}

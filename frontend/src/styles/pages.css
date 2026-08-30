@@ -1,5 +1,6 @@
-/* Shared layout building blocks for every inner page, built on the same
-   design tokens as Home.css so the whole site feels like one product. */
+/* =========================================================
+   SHARED PAGE STYLES
+   ========================================================= */
 
 .page-hero {
   padding: 70px 0 60px;
@@ -9,11 +10,11 @@
 
 .page-hero h1 {
   max-width: 760px;
+  margin: 14px 0 16px;
   font-size: clamp(32px, 4.5vw, 52px);
   line-height: 1.1;
   letter-spacing: -1.5px;
   font-weight: 800;
-  margin: 14px 0 16px;
 }
 
 .page-hero > .container > p {
@@ -23,7 +24,11 @@
   line-height: 1.8;
 }
 
-/* ---------- generic section spacing ---------- */
+
+/* =========================================================
+   GENERIC SECTION SPACING
+   ========================================================= */
+
 .page-about section,
 .page-services section,
 .page-clients section,
@@ -44,7 +49,11 @@
   padding: 70px 0 60px;
 }
 
-/* ---------- About ---------- */
+
+/* =========================================================
+   ABOUT
+   ========================================================= */
+
 .about-story-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
@@ -53,17 +62,43 @@
 }
 
 .about-story-grid h2 {
-  font-size: clamp(28px, 3.5vw, 40px);
-  letter-spacing: -1px;
   margin: 12px 0 18px;
+  font-size: clamp(28px, 3.5vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -1px;
   font-weight: 800;
 }
 
 .about-story-grid p {
+  margin-bottom: 14px;
   color: var(--color-gray);
   line-height: 1.8;
-  margin-bottom: 14px;
 }
+
+
+/* =========================================================
+   ABOUT IMAGE - FULL IMAGE / NO CROPPING
+   ========================================================= */
+
+.about-story-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+}
+
+.about-story-grid > div:first-child {
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+
+/* =========================================================
+   ABOUT STATS
+   ========================================================= */
 
 .about-stats {
   display: grid;
@@ -72,23 +107,28 @@
 }
 
 .about-stats > div {
+  padding: 26px 20px;
   background: var(--color-off-white);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: 26px 20px;
 }
 
 .about-stats strong {
   display: block;
+  color: var(--color-primary-dark);
   font-size: 34px;
   font-weight: 800;
-  color: var(--color-primary-dark);
 }
 
 .about-stats span {
-  font-size: 13px;
   color: var(--color-gray);
+  font-size: 13px;
 }
+
+
+/* =========================================================
+   ABOUT PILLARS
+   ========================================================= */
 
 .about-pillars {
   background: var(--color-off-white);
@@ -101,20 +141,20 @@
 }
 
 .pillar-card {
+  padding: 34px 28px;
   background: var(--color-white);
   border-radius: var(--radius-lg);
-  padding: 34px 28px;
   box-shadow: var(--shadow-card);
 }
 
 .pillar-card svg {
-  color: var(--color-primary);
   margin-bottom: 16px;
+  color: var(--color-primary);
 }
 
 .pillar-card h3 {
-  font-size: 19px;
   margin-bottom: 10px;
+  font-size: 19px;
   font-weight: 800;
 }
 
@@ -124,23 +164,28 @@
   line-height: 1.75;
 }
 
+
+/* =========================================================
+   ABOUT / CONTACT CTA
+   ========================================================= */
+
 .about-cta-inner,
 .contact-cta-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 30px;
+  padding: 48px;
   background: var(--color-black);
   color: var(--color-white);
   border-radius: var(--radius-lg);
-  padding: 48px;
   flex-wrap: wrap;
 }
 
 .about-cta-inner h2,
 .contact-cta-inner h2 {
-  font-size: 30px;
   margin-bottom: 8px;
+  font-size: 30px;
 }
 
 .about-cta-inner p,
@@ -148,7 +193,11 @@
   color: rgba(255, 255, 255, 0.65);
 }
 
-/* ---------- generic grid of cards (Services / Clients / Team / Blog) ---------- */
+
+/* =========================================================
+   GENERIC CARDS
+   ========================================================= */
+
 .card-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -156,44 +205,48 @@
 }
 
 .info-card {
+  padding: 30px;
   background: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: 30px;
   transition: var(--transition-fast);
 }
 
 .info-card:hover {
+  border-color: transparent;
   box-shadow: var(--shadow-hover);
   transform: translateY(-4px);
-  border-color: transparent;
 }
 
 .info-card .card-icon {
   width: 52px;
   height: 52px;
-  border-radius: var(--radius-md);
-  background: var(--color-primary-light);
-  color: var(--color-primary-dark);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 18px;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  border-radius: var(--radius-md);
 }
 
 .info-card h3 {
+  margin-bottom: 10px;
   font-size: 18px;
   font-weight: 800;
-  margin-bottom: 10px;
 }
 
 .info-card p {
-  font-size: 14px;
   color: var(--color-gray);
+  font-size: 14px;
   line-height: 1.75;
 }
 
-/* ---------- Team ---------- */
+
+/* =========================================================
+   TEAM
+   ========================================================= */
+
 .team-card {
   text-align: center;
 }
@@ -201,13 +254,13 @@
 .team-photo {
   width: 110px;
   height: 110px;
-  border-radius: 50%;
-  margin: 0 auto 16px;
-  background: var(--color-primary-light);
-  color: var(--color-primary-dark);
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto 16px;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  border-radius: 50%;
   font-size: 28px;
   font-weight: 800;
   overflow: hidden;
@@ -233,17 +286,21 @@
 }
 
 .team-card h3 {
+  margin-bottom: 4px;
   font-size: 16px;
   font-weight: 800;
-  margin-bottom: 4px;
 }
 
 .team-card span {
-  font-size: 13px;
   color: var(--color-gray);
+  font-size: 13px;
 }
 
-/* ---------- Clients ---------- */
+
+/* =========================================================
+   CLIENTS
+   ========================================================= */
+
 .client-card {
   display: flex;
   align-items: center;
@@ -253,14 +310,14 @@
 .client-mark {
   width: 46px;
   height: 46px;
-  border-radius: var(--radius-sm);
-  background: var(--color-black);
-  color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
   flex-shrink: 0;
+  background: var(--color-black);
+  color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  font-weight: 800;
 }
 
 .client-card h3 {
@@ -269,36 +326,216 @@
 }
 
 .client-card span {
-  font-size: 12.5px;
   color: var(--color-gray);
+  font-size: 12.5px;
 }
 
-/* ---------- Careers ---------- */
+
+/* =========================================================
+   OUR VALUED CLIENTS
+   ========================================================= */
+
+.clients-section {
+  background: var(--color-white);
+  overflow: hidden;
+}
+
+.clients-section .center-heading {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.clients-section .center-heading .section-label {
+  display: none;
+}
+
+.clients-section .center-heading .section-title {
+  max-width: none;
+  margin: 0 auto;
+  color: #050505;
+  font-size: clamp(30px, 3.5vw, 42px);
+  line-height: 1.15;
+  letter-spacing: -1.2px;
+  font-weight: 800;
+}
+
+.clients-section .center-heading .section-title span {
+  color: inherit;
+}
+
+.clients-section .center-heading p {
+  display: none;
+}
+
+
+/* =========================================================
+   LOGO CAROUSEL
+   ========================================================= */
+
+.logo-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 42px;
+  padding: 10px 0;
+}
+
+.logo-carousel-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.logo-carousel-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 145px;
+  padding: 15px 28px;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.logo-carousel-item:hover {
+  transform: translateY(-3px);
+}
+
+.logo-carousel-item img {
+  display: block;
+  width: auto;
+  max-width: 180px;
+  max-height: 78px;
+  object-fit: contain;
+  opacity: 1;
+  filter: none;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.logo-carousel-item:hover img {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.logo-carousel-badge {
+  display: block;
+  max-width: 180px;
+  color: var(--color-text);
+  font-size: 15px;
+  line-height: 1.3;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  opacity: 0.8;
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.logo-carousel-item:hover .logo-carousel-badge {
+  color: var(--color-primary-dark);
+  opacity: 1;
+}
+
+
+/* =========================================================
+   LOGO CAROUSEL ARROWS
+   ========================================================= */
+
+.logo-carousel-arrow {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.logo-carousel-arrow:hover {
+  background: var(--color-primary-dark);
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.14);
+  transform: scale(1.08);
+}
+
+.logo-carousel-arrow:active {
+  transform: scale(0.95);
+}
+
+.logo-carousel-arrow svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.5;
+}
+
+.logo-carousel-prev {
+  margin-right: 15px;
+}
+
+.logo-carousel-next {
+  margin-left: 15px;
+}
+
+.logo-carousel-next::before {
+  content: "";
+  position: absolute;
+  top: -36px;
+  left: -16px;
+  width: 7px;
+  height: 145px;
+  background: var(--color-primary);
+}
+
+
+/* =========================================================
+   CAREERS
+   ========================================================= */
+
 .job-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  margin-bottom: 16px;
+  padding: 24px 26px;
   background: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: 24px 26px;
-  margin-bottom: 16px;
   flex-wrap: wrap;
 }
 
 .job-card h3 {
+  margin-bottom: 6px;
   font-size: 17px;
   font-weight: 800;
-  margin-bottom: 6px;
 }
 
 .job-meta {
   display: flex;
   gap: 14px;
-  flex-wrap: wrap;
-  font-size: 12.5px;
   color: var(--color-gray);
+  font-size: 12.5px;
+  flex-wrap: wrap;
 }
 
 .job-meta span {
@@ -308,14 +545,18 @@
 }
 
 .empty-state {
-  text-align: center;
   padding: 60px 20px;
   color: var(--color-gray);
+  text-align: center;
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-md);
 }
 
-/* ---------- Contact ---------- */
+
+/* =========================================================
+   CONTACT
+   ========================================================= */
+
 .contact-grid {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
@@ -331,21 +572,21 @@
 }
 
 .contact-detail-card svg {
-  color: var(--color-primary);
-  flex-shrink: 0;
   margin-top: 2px;
+  flex-shrink: 0;
+  color: var(--color-primary);
 }
 
 .contact-detail-card h4 {
+  margin-bottom: 4px;
   font-size: 14px;
   font-weight: 800;
-  margin-bottom: 4px;
 }
 
 .contact-detail-card p,
 .contact-detail-card a {
-  font-size: 13.5px;
   color: var(--color-gray);
+  font-size: 13.5px;
 }
 
 .contact-form {
@@ -361,21 +602,21 @@
 
 .contact-form label {
   display: block;
-  font-size: 12.5px;
-  font-weight: 700;
   margin-bottom: 8px;
   color: var(--color-dark);
+  font-size: 12.5px;
+  font-weight: 700;
 }
 
 .contact-form input,
 .contact-form select,
 .contact-form textarea {
   width: 100%;
+  padding: 13px 15px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  padding: 13px 15px;
-  font-size: 14px;
   font-family: var(--font-body);
+  font-size: 14px;
 }
 
 .contact-form input:focus,
@@ -391,58 +632,66 @@
 }
 
 .form-success {
+  padding: 14px 16px;
   background: var(--color-primary-light);
   color: var(--color-primary-dark);
   border-radius: var(--radius-sm);
-  padding: 14px 16px;
   font-size: 13.5px;
   font-weight: 600;
 }
 
-/* ---------- Blog ---------- */
+
+/* =========================================================
+   BLOG
+   ========================================================= */
+
 .blog-card h3 {
+  margin: 6px 0 10px;
   font-size: 18px;
   font-weight: 800;
-  margin: 6px 0 10px;
 }
 
 .blog-date {
-  font-size: 12px;
   color: var(--color-primary-dark);
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.6px;
 }
 
-/* ---------- Modal (apply / detail views) ---------- */
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(17, 17, 17, 0.55);
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  z-index: 1000;
+  background: rgba(17, 17, 17, 0.55);
 }
 
 .modal-card {
   position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  padding: 34px;
+  overflow-y: auto;
   background: var(--color-white);
   border-radius: var(--radius-lg);
-  padding: 34px;
-  max-width: 480px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
   box-shadow: var(--shadow-hover);
 }
 
 .modal-card h3 {
-  font-size: 20px;
-  font-weight: 800;
   margin-bottom: 18px;
   padding-right: 24px;
+  font-size: 20px;
+  font-weight: 800;
 }
 
 .modal-close {
@@ -456,29 +705,495 @@
   color: var(--color-black);
 }
 
-/* ---------- 404 ---------- */
+
+/* =========================================================
+   404
+   ========================================================= */
+
 .page-notfound {
   min-height: 60vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
   gap: 16px;
   padding: 100px 20px;
+  text-align: center;
 }
 
 .page-notfound h1 {
-  font-size: clamp(60px, 12vw, 120px);
-  font-weight: 800;
   color: var(--color-primary);
+  font-size: clamp(60px, 12vw, 120px);
   line-height: 1;
+  font-weight: 800;
 }
+
+
+/* =========================================================
+   SERVICES PAGE
+   ========================================================= */
+
+.page-services {
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   SERVICES CATEGORY GRID
+   ========================================================= */
+
+.service-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  padding: 20px 0 60px;
+}
+
+.service-photo-card {
+  display: block;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.service-photo-card:hover {
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.13);
+  transform: translateY(-5px);
+}
+
+.service-photo-card-image {
+  width: 100%;
+  height: 185px;
+  overflow: hidden;
+  background: #eee9df;
+}
+
+.service-photo-card-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.service-photo-card:hover .service-photo-card-image img {
+  transform: scale(1.05);
+}
+
+.service-photo-card-label {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: #111111;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+
+/* =========================================================
+   GENERIC SERVICE DETAIL (gallery + about)
+   ========================================================= */
+
+.service-gallery-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.service-gallery-heading h2 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.service-gallery-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  border-radius: var(--radius-md);
+}
+
+.service-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.service-gallery-card {
+  overflow: hidden;
+  height: 165px;
+  background: #eee9df;
+  border: 1px solid #e5e0d8;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.045);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.service-gallery-card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+.service-gallery-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.service-gallery-card:hover img {
+  transform: scale(1.06);
+}
+
+.service-about {
+  max-width: 760px;
+}
+
+.service-about h2 {
+  margin-bottom: 16px;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.service-about p {
+  margin-bottom: 14px;
+  color: var(--color-gray);
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+
+/* =========================================================
+   HOSPITALITY PAGE
+   ========================================================= */
+
+.page-hospitality {
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   HOSPITALITY HERO
+   ========================================================= */
+
+.hospitality-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 270px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      135deg,
+      #171717 0%,
+      #262626 60%,
+      #3b2d17 100%
+    );
+  color: #ffffff;
+}
+
+.hospitality-hero::after {
+  content: "";
+  position: absolute;
+  top: -150px;
+  right: -120px;
+  width: 330px;
+  height: 330px;
+  border: 1px solid rgba(201, 150, 46, 0.25);
+  border-radius: 50%;
+}
+
+.hospitality-hero-inner {
+  position: relative;
+  z-index: 2;
+  padding-top: 45px;
+  padding-bottom: 45px;
+}
+
+.hospitality-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 25px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hospitality-back:hover {
+  color: #ffffff;
+}
+
+.hospitality-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-primary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.hospitality-hero h1 {
+  margin: 0 0 12px;
+  font-size: clamp(42px, 6vw, 68px);
+  line-height: 0.95;
+  letter-spacing: 1px;
+  font-weight: 900;
+}
+
+.hospitality-hero p {
+  max-width: 620px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   HOSPITALITY DEPARTMENT NAVIGATION
+   ========================================================= */
+
+.hospitality-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom: 1px solid #e7e2d9;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+.hospitality-nav-scroll {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.hospitality-nav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hospitality-nav-link {
+  position: relative;
+  flex: 0 0 auto;
+  padding: 21px 0 18px;
+  color: #55524c;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.hospitality-nav-link::after {
+  content: "";
+  position: absolute;
+  right: 100%;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--color-primary);
+  transition: right 0.25s ease;
+}
+
+.hospitality-nav-link:hover {
+  color: #111111;
+}
+
+.hospitality-nav-link:hover::after {
+  right: 0;
+}
+
+
+/* =========================================================
+   HOSPITALITY DEPARTMENTS
+   ========================================================= */
+
+.hospitality-department {
+  padding: 58px 0 64px;
+  background: #ffffff;
+  scroll-margin-top: 58px;
+}
+
+.hospitality-department:nth-child(even) {
+  background: #faf8f4;
+}
+
+
+/* =========================================================
+   HOSPITALITY HEADING
+   ========================================================= */
+
+.hospitality-heading {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-bottom: 27px;
+}
+
+.hospitality-heading span {
+  display: none;
+}
+
+.hospitality-heading h2 {
+  position: relative;
+  margin: 0;
+  padding-right: 45px;
+  color: #202020;
+  font-size: 25px;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.hospitality-heading h2::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 32px;
+  height: 2px;
+  background: var(--color-primary);
+  transform: translateY(-50%);
+}
+
+
+/* =========================================================
+   HOSPITALITY ROLE GRID
+   ========================================================= */
+
+.hospitality-role-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.hospitality-role-card {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e5e0d8;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.045);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.hospitality-role-card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+.hospitality-role-image {
+  width: 100%;
+  height: 145px;
+  overflow: hidden;
+  background: #eee9df;
+}
+
+.hospitality-role-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.hospitality-role-card:hover .hospitality-role-image img {
+  transform: scale(1.06);
+}
+
+.hospitality-role-name {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 8px;
+  background: #ffffff;
+  color: #252525;
+  font-size: 11px;
+  line-height: 1.3;
+  font-weight: 750;
+  text-align: center;
+}
+
+
+/* =========================================================
+   HOSPITALITY CTA
+   ========================================================= */
+
+.hospitality-cta {
+  padding: 60px 0;
+  background: #171717;
+  color: #ffffff;
+}
+
+.hospitality-cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.hospitality-cta h2 {
+  max-width: 600px;
+  margin: 0;
+  font-size: clamp(25px, 3vw, 38px);
+  line-height: 1.15;
+}
+
+
+/* =========================================================
+   TABLET - 1050px
+   ========================================================= */
+
+@media (max-width: 1050px) {
+  .hospitality-role-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hospitality-nav-scroll {
+    justify-content: flex-start;
+  }
+
+  .service-gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+/* =========================================================
+   TABLET - 900px
+   ========================================================= */
 
 @media (max-width: 900px) {
   .about-story-grid,
   .contact-grid {
     grid-template-columns: 1fr;
+  }
+
+  .about-story-grid {
+    gap: 40px;
   }
 
   .pillars-grid,
@@ -492,7 +1207,69 @@
     align-items: flex-start;
     padding: 36px 26px;
   }
+
+  .logo-carousel-track {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .logo-carousel-item {
+    height: 125px;
+    padding: 12px 20px;
+  }
+
+  .logo-carousel-item img {
+    max-width: 145px;
+    max-height: 65px;
+  }
+
+  .logo-carousel-next::before {
+    top: -30px;
+    height: 125px;
+  }
+
+  .service-photo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
+
+
+/* =========================================================
+   HOSPITALITY TABLET / MOBILE - 720px
+   ========================================================= */
+
+@media (max-width: 720px) {
+  .hospitality-role-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .hospitality-role-image {
+    height: 135px;
+  }
+
+  .hospitality-department {
+    padding: 48px 0 52px;
+  }
+
+  .service-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .service-gallery-card {
+    height: 130px;
+  }
+
+  .hospitality-cta-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+
+/* =========================================================
+   MOBILE - 600px
+   ========================================================= */
 
 @media (max-width: 600px) {
   .pillars-grid,
@@ -502,8 +1279,157 @@
     grid-template-columns: 1fr;
   }
 
+  .about-story-grid {
+    gap: 30px;
+  }
+
   .job-card {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .clients-section .center-heading .section-title {
+    font-size: 30px;
+  }
+
+  .logo-carousel {
+    gap: 8px;
+    margin-top: 32px;
+  }
+
+  .logo-carousel-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .logo-carousel-item {
+    height: 115px;
+    padding: 10px 12px;
+  }
+
+  .logo-carousel-item img {
+    max-width: 125px;
+    max-height: 58px;
+  }
+
+  .logo-carousel-badge {
+    max-width: 125px;
+    font-size: 12px;
+  }
+
+  .logo-carousel-arrow {
+    width: 32px;
+    height: 32px;
+  }
+
+  .logo-carousel-arrow svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .logo-carousel-prev {
+    margin-right: 5px;
+  }
+
+  .logo-carousel-next {
+    margin-left: 5px;
+  }
+
+  .logo-carousel-next::before {
+    top: -28px;
+    left: -8px;
+    width: 4px;
+    height: 115px;
+  }
+
+  .service-photo-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .service-photo-card-image {
+    height: 180px;
+  }
+
+  .hospitality-hero {
+    min-height: 250px;
+  }
+
+  .hospitality-hero-inner {
+    padding-top: 35px;
+    padding-bottom: 35px;
+  }
+
+  .hospitality-hero h1 {
+    font-size: 42px;
+  }
+
+  .hospitality-role-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .hospitality-role-image {
+    height: 110px;
+  }
+
+  .hospitality-role-name {
+    min-height: 43px;
+    padding: 7px 5px;
+    font-size: 10px;
+  }
+
+  .hospitality-heading {
+    margin-bottom: 22px;
+  }
+
+  .hospitality-heading h2 {
+    font-size: 22px;
+  }
+
+  .hospitality-nav-scroll {
+    gap: 20px;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES - 420px
+   ========================================================= */
+
+@media (max-width: 420px) {
+  .logo-carousel {
+    gap: 5px;
+  }
+
+  .logo-carousel-item {
+    height: 100px;
+    padding: 8px;
+  }
+
+  .logo-carousel-item img {
+    max-width: 105px;
+    max-height: 50px;
+  }
+
+  .logo-carousel-arrow {
+    width: 29px;
+    height: 29px;
+  }
+
+  .logo-carousel-next::before {
+    top: -24px;
+    height: 100px;
+  }
+
+  .hospitality-role-image {
+    height: 100px;
+  }
+
+  .hospitality-role-name {
+    font-size: 9.5px;
+  }
+
+  .service-photo-card-image {
+    height: 165px;
   }
 }

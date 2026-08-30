@@ -1,0 +1,231 @@
+/* =========================================================
+   CONTACT PAGE
+   ========================================================= */
+
+.contact2-page {
+  background: var(--color-black);
+}
+
+/* ---------- TOP SECTION: LOCATE CARD + FORM ---------- */
+
+.contact2-top {
+  padding: 90px 0;
+}
+
+.contact2-top-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 60px;
+  align-items: stretch;
+}
+
+/* Locate card block */
+
+.contact2-locate {
+  position: relative;
+  min-height: 420px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 35% 65%;
+}
+
+.contact2-locate-gold {
+  background: var(--color-primary);
+}
+
+.contact2-locate-white {
+  background: var(--color-white);
+}
+
+.contact2-locate-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 88%;
+  max-width: 420px;
+  background: var(--color-black);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  text-align: center;
+  color: var(--color-white);
+  box-shadow: var(--shadow-lg);
+}
+
+.contact2-locate-block + .contact2-locate-block {
+  margin-top: 26px;
+}
+
+.contact2-locate-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+}
+
+.contact2-locate-label {
+  color: var(--color-primary);
+  font-weight: 700;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.contact2-locate-block p {
+  margin: 0 0 2px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.contact2-locate-block a {
+  color: var(--color-white);
+  text-decoration: none;
+}
+
+.contact2-locate-block a:hover {
+  color: var(--color-primary);
+}
+
+/* Form panel */
+
+.contact2-form-panel {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: 44px 40px;
+}
+
+.contact2-field {
+  margin-bottom: 20px;
+}
+
+.contact2-field label {
+  display: block;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.contact2-field label .required {
+  color: var(--color-primary);
+}
+
+.contact2-field input,
+.contact2-field textarea {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-white);
+  transition: border-color var(--transition-fast);
+}
+
+.contact2-field input:focus,
+.contact2-field textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.contact2-field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.contact2-bot-label {
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.contact2-bot-box {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 0.9rem;
+  color: var(--color-gray);
+  margin-bottom: 22px;
+}
+
+.contact2-submit-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.contact2-submit-btn {
+  background: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 13px 34px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.contact2-submit-btn:hover {
+  background: var(--color-dark-soft);
+}
+
+.contact2-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.contact2-form-success,
+.contact2-form-error {
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.contact2-form-success {
+  background: #e9f7ee;
+  color: #1e7a41;
+  border: 1px solid #bfe6cd;
+}
+
+.contact2-form-error {
+  background: #fdeceb;
+  color: #b3261e;
+  border: 1px solid #f6c6c2;
+}
+
+/* ---------- FULL WIDTH MAP ---------- */
+
+.contact2-map {
+  width: 100%;
+  height: 420px;
+  border: none;
+  display: block;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 900px) {
+  .contact2-top-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact2-locate {
+    min-height: 380px;
+  }
+
+  .contact2-form-panel {
+    padding: 32px 24px;
+  }
+
+  .contact2-map {
+    height: 300px;
+  }
+}

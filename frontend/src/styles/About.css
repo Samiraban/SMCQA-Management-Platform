@@ -1,0 +1,542 @@
+/* =========================================================
+   ABOUT PAGE
+   ========================================================= */
+
+.about2-page {
+  width: 100%;
+  overflow: hidden;
+}
+
+.about2-page h1,
+.about2-page h2,
+.about2-page h3 {
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   SHARED SECTIONS
+   ========================================================= */
+
+.about2-dark {
+  background: #111111;
+  color: #ffffff;
+  padding: 90px 0;
+}
+
+.about2-light {
+  background: #ffffff;
+  color: #111111;
+  padding: 90px 0;
+}
+
+
+/* =========================================================
+   SMALL SECTION LABEL
+   ========================================================= */
+
+.about2-label {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   FEW WORDS ABOUT US
+   ========================================================= */
+
+.about2-words-section {
+  padding: 88px 0 95px;
+}
+
+.about2-words-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 52px;
+  align-items: center;
+}
+
+
+/* =========================================================
+   MAIN ABOUT IMAGE
+   ========================================================= */
+
+.about2-words-img {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.about2-words-img img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: var(--radius-md);
+}
+
+/* =========================================================
+   ABOUT CONTENT
+   ========================================================= */
+
+.about2-words-content {
+  min-width: 0;
+}
+
+.about2-words-content h2 {
+  margin: 0 0 22px;
+  color: #ffffff;
+  font-size: clamp(30px, 3.5vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.about2-dark p {
+  margin: 0 0 17px;
+  color: #e5e5e5;
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.about2-dark p:last-child {
+  margin-bottom: 0;
+}
+
+.about2-lead {
+  color: #ffffff !important;
+  font-size: 16px !important;
+  font-weight: 700;
+  line-height: 1.75 !important;
+}
+
+
+/* =========================================================
+   GLOBAL PRESENCE
+   ========================================================= */
+
+.about2-global-section {
+  padding: 85px 0;
+}
+
+.about2-global {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+}
+
+.about2-global-img {
+  width: 100%;
+  aspect-ratio: 1600 / 420;
+  overflow: hidden;
+  background: #171717;
+}
+
+.about2-global-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.about2-global-header {
+  padding: 32px 25px;
+  text-align: center;
+  background: #171717;
+}
+
+.about2-global-header .about2-label {
+  margin-bottom: 7px;
+}
+
+.about2-global-header h2 {
+  margin: 0;
+  color: #ffffff !important;
+  font-size: clamp(27px, 3vw, 38px);
+  line-height: 1.15;
+}
+
+.about2-global-body {
+  padding: 38px 30px;
+  background: #222222;
+}
+
+.about2-global-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-height: 48px;
+  padding: 10px 0;
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.about2-star {
+  flex: 0 0 auto;
+  color: var(--color-primary);
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   REQUIREMENTS
+   ========================================================= */
+
+.about2-require-section {
+  padding: 90px 0;
+}
+
+.about2-require-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 55px;
+  align-items: center;
+}
+
+.about2-require-content {
+  min-width: 0;
+}
+
+.about2-require-content h2 {
+  margin: 0 0 20px;
+  color: #ffffff;
+  font-size: clamp(30px, 3.4vw, 42px);
+  line-height: 1.12;
+}
+
+.about2-require-content p {
+  max-width: 680px;
+}
+
+
+/* =========================================================
+   REQUIREMENTS IMAGE
+   ========================================================= */
+
+.about2-require-img {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #222222;
+}
+
+.about2-require-img img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+
+/* =========================================================
+   CHECKLIST
+   ========================================================= */
+
+.about2-checklist {
+  list-style: none;
+  margin: 20px 0 25px;
+  padding: 0;
+}
+
+.about2-checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 7px 0;
+  color: #eeeeee;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.about2-light .about2-checklist li {
+  color: #333333;
+}
+
+.about2-check {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--color-primary);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+
+/* =========================================================
+   CLEARANCE
+   ========================================================= */
+
+.about2-clearance {
+  padding: 78px 0;
+  background: #171717;
+}
+
+.about2-clearance-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about2-clearance-inner h2 {
+  margin: 0 0 20px;
+  color: #ffffff;
+  font-size: clamp(30px, 3.5vw, 42px);
+}
+
+.about2-clearance-inner p {
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* =========================================================
+   SERVICE AGREEMENT
+   ========================================================= */
+
+.about2-agreement-section {
+  padding: 90px 0;
+}
+
+.about2-agreement-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 55px;
+  align-items: center;
+}
+
+.about2-agreement-img {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #f3f1ed;
+}
+
+.about2-agreement-img img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.about2-agreement-content {
+  min-width: 0;
+}
+
+.about2-light h2 {
+  margin: 0 0 20px;
+  color: #111111;
+  font-size: clamp(30px, 3.5vw, 42px);
+  line-height: 1.12;
+}
+
+.about2-light p {
+  margin: 0 0 17px;
+  color: #555555;
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+
+/* =========================================================
+   COMPANY REGISTRATION
+   ========================================================= */
+
+.about2-registration-section {
+  padding: 90px 0;
+}
+
+.about2-registration-heading {
+  margin-bottom: 42px;
+  text-align: center;
+}
+
+.about2-registration-heading .about2-label {
+  margin-bottom: 8px;
+}
+
+.about2-registration-heading h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(30px, 3.5vw, 42px);
+  line-height: 1.15;
+}
+
+.about2-registration-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  align-items: start;
+}
+
+.about2-registration-card {
+  overflow: hidden;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.about2-registration-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .about2-dark,
+  .about2-light {
+    padding: 70px 0;
+  }
+
+  .about2-words-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 52px;
+  align-items: start;
+}
+
+  .about2-words-img {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .about2-require-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .about2-require-img {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .about2-agreement-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .about2-agreement-img {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .about2-registration-grid {
+    grid-template-columns: 1fr;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .about2-dark,
+  .about2-light {
+    padding: 55px 0;
+  }
+
+  .about2-words-section {
+    padding: 50px 0 60px;
+  }
+
+  .about2-words-grid,
+  .about2-require-grid,
+  .about2-agreement-grid {
+    gap: 30px;
+  }
+
+  .about2-words-img,
+  .about2-require-img,
+  .about2-agreement-img {
+    border-radius: 10px;
+  }
+
+  .about2-words-content h2,
+  .about2-require-content h2,
+  .about2-light h2 {
+    font-size: 29px;
+  }
+
+  .about2-dark p,
+  .about2-light p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .about2-lead {
+    font-size: 15px !important;
+  }
+
+  .about2-global-body {
+    padding: 25px 18px;
+  }
+
+  .about2-global-item {
+    justify-content: flex-start;
+    text-align: left;
+    font-size: 13px;
+  }
+
+  .about2-checklist li {
+    font-size: 13.5px;
+  }
+
+  .about2-registration-grid {
+    gap: 20px;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+  .about2-dark,
+  .about2-light {
+    padding: 48px 0;
+  }
+
+  .about2-words-content h2,
+  .about2-require-content h2,
+  .about2-light h2 {
+    font-size: 26px;
+  }
+
+  .about2-global-header {
+    padding: 25px 18px;
+  }
+
+  .about2-global-body {
+    padding: 20px 15px;
+  }
+
+  .about2-global-item {
+    font-size: 12px;
+  }
+}

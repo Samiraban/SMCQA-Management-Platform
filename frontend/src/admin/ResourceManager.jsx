@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, X } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  X,
+} from "lucide-react";
+
 import { useCollection } from "../lib/useRealtime.js";
 
-/**
- * A generic, reusable admin table with add/edit/delete — every "Manage X"
- * page in /admin is a thin wrapper around this component. Data updates
- * everywhere on the site the instant you save here (see lib/store.js).
- */
 function ResourceManager({
   title,
   description,
@@ -15,36 +16,140 @@ function ResourceManager({
   onCreate,
   onUpdate,
   onDelete,
-  columns, // optional: which field keys to show as table columns (defaults to all)
+  columns,
 }) {
-  const items = useCollection(collection);
-  const [editing, setEditing] = useState(null); // null = closed, {} = new, {...} = edit
-  const displayCols = columns || fields.map((f) => f.key);
+  const items = useCollection(
+    collection
+  );
+
+  const [editing, setEditing] =
+    useState(null);
+
+  const [saving, setSaving] =
+    useState(false);
+
+  const [error, setError] =
+    useState("");
+
+  const displayCols =
+    columns ||
+    fields.map((field) => field.key);
 
   function openNew() {
     const blank = {};
-    fields.forEach((f) => (blank[f.key] = f.default ?? ""));
+
+    fields.forEach((field) => {
+      blank[field.key] =
+        field.default ?? "";
+    });
+
+    setError("");
     setEditing(blank);
   }
 
   function openEdit(item) {
-    setEditing(item);
+    setError("");
+
+    setEditing({
+      ...item,
+    });
   }
 
-  function handleSave(e) {
+  async function handleSave(e) {
     e.preventDefault();
-    if (editing.id) {
-      onUpdate(editing.id, editing);
-    } else {
-      onCreate(editing);
+
+    setError("");
+    setSaving(true);
+
+    try {
+      if (editing.id) {
+        await onUpdate(
+          editing.id,
+          editing
+        );
+      } else {
+        await onCreate(editing);
+      }
+
+      setEditing(null);
+    } catch (error) {
+      console.error(
+        "Admin save failed:",
+        error
+      );
+
+      setError(
+        error.message ||
+          "Unable to save this record."
+      );
+    } finally {
+      setSaving(false);
     }
-    setEditing(null);
   }
 
-  function handleDelete(id) {
-    if (confirm("Delete this item? This can't be undone.")) {
-      onDelete(id);
+  async function handleDelete(id) {
+    const confirmed = window.confirm(
+      "Delete this item? This can't be undone."
+    );
+
+    if (!confirmed) {
+      return;
     }
+
+    try {
+      await onDelete(id);
+    } catch (error) {
+      console.error(
+        "Admin delete failed:",
+        error
+      );
+
+      window.alert(
+        error.message ||
+          "Unable to delete this record."
+      );
+    }
+  }
+
+  function updateField(
+    key,
+    value
+  ) {
+    setEditing((current) => ({
+      ...current,
+      [key]: value,
+    }));
+  }
+
+  function getLabel(key) {
+    return (
+      fields.find(
+        (field) => field.key === key
+      )?.label || key
+    );
+  }
+
+  function formatValue(value) {
+    if (
+      value === null ||
+      value === undefined
+    ) {
+      return "";
+    }
+
+    if (
+      typeof value === "object"
+    ) {
+      return JSON.stringify(value);
+    }
+
+    return String(value).slice(0, 80);
+  }
+
+  function getFieldType(key) {
+    return fields.find(
+      (field) => field.key === key
+    )?.type;
   }
 
   return (
@@ -52,37 +157,97 @@ function ResourceManager({
       <div className="admin-page-header">
         <div>
           <h1>{title}</h1>
-          {description && <p>{description}</p>}
+
+          {description && (
+            <p>{description}</p>
+          )}
         </div>
-        <button className="btn btn-dark" onClick={openNew}>
-          <Plus size={16} /> Add New
+
+        <button
+          type="button"
+          className="btn btn-dark"
+          onClick={openNew}
+          disabled={saving}
+        >
+          <Plus size={16} />
+          Add New
         </button>
       </div>
 
       <div className="admin-table-wrap">
         {items.length === 0 ? (
-          <div className="empty-state">No records yet — add your first one.</div>
+          <div className="empty-state">
+            No records yet — add your
+            first one.
+          </div>
         ) : (
           <table className="admin-table">
             <thead>
               <tr>
-                {displayCols.map((key) => (
-                  <th key={key}>{fields.find((f) => f.key === key)?.label || key}</th>
-                ))}
-                <th className="admin-table-actions-col">Actions</th>
+                {displayCols.map(
+                  (key) => (
+                    <th key={key}>
+                      {getLabel(key)}
+                    </th>
+                  )
+                )}
+
+                <th className="admin-table-actions-col">
+                  Actions
+                </th>
               </tr>
             </thead>
+
             <tbody>
               {items.map((item) => (
                 <tr key={item.id}>
-                  {displayCols.map((key) => (
-                    <td key={key}>{String(item[key] ?? "").slice(0, 80)}</td>
-                  ))}
+                  {displayCols.map(
+                    (key) =>
+                      getFieldType(key) ===
+                      "image" ? (
+                        <td key={key}>
+                          {item[key] ? (
+                            <img
+                              src={item[key]}
+                              alt=""
+                              className="admin-table-thumb"
+                            />
+                          ) : (
+                            <span className="admin-table-thumb admin-table-thumb-empty" />
+                          )}
+                        </td>
+                      ) : (
+                        <td key={key}>
+                          {formatValue(
+                            item[key]
+                          )}
+                        </td>
+                      )
+                  )}
+
                   <td className="admin-table-actions">
-                    <button onClick={() => openEdit(item)} aria-label="Edit">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        openEdit(item)
+                      }
+                      aria-label="Edit"
+                      disabled={saving}
+                    >
                       <Pencil size={15} />
                     </button>
-                    <button onClick={() => handleDelete(item.id)} aria-label="Delete" className="danger">
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleDelete(
+                          item.id
+                        )
+                      }
+                      aria-label="Delete"
+                      className="danger"
+                      disabled={saving}
+                    >
                       <Trash2 size={15} />
                     </button>
                   </td>
@@ -94,45 +259,237 @@ function ResourceManager({
       </div>
 
       {editing && (
-        <div className="modal-overlay" onClick={() => setEditing(null)}>
-          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setEditing(null)} aria-label="Close">
+        <div
+          className="modal-overlay"
+          onClick={() => {
+            if (!saving) {
+              setEditing(null);
+            }
+          }}
+        >
+          <div
+            className="modal-card"
+            onClick={(e) =>
+              e.stopPropagation()
+            }
+          >
+            <button
+              type="button"
+              className="modal-close"
+              onClick={() =>
+                !saving &&
+                setEditing(null)
+              }
+              aria-label="Close"
+              disabled={saving}
+            >
               <X size={18} />
             </button>
-            <h3>{editing.id ? "Edit" : "Add"} {title.replace(/^Manage /, "").replace(/s$/, "")}</h3>
-            <form className="contact-form" onSubmit={handleSave}>
-              {fields.map((f) => (
-                <div key={f.key}>
-                  <label>{f.label}</label>
-                  {f.type === "textarea" ? (
+
+            <h3>
+              {editing.id
+                ? "Edit"
+                : "Add"}{" "}
+              {title
+                .replace(
+                  /^Manage /,
+                  ""
+                )
+                .replace(/s$/, "")}
+            </h3>
+
+            {error && (
+              <div
+                className="form-error"
+                style={{
+                  marginBottom: 18,
+                }}
+              >
+                {error}
+              </div>
+            )}
+
+            <form
+              className="contact-form"
+              onSubmit={handleSave}
+            >
+              {fields.map((field) => (
+                <div key={field.key}>
+                  <label>
+                    {field.label}
+                  </label>
+
+                  {field.type ===
+                  "textarea" ? (
                     <textarea
-                      value={editing[f.key] ?? ""}
-                      onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })}
-                      required={f.required}
+                      value={
+                        editing[
+                          field.key
+                        ] ?? ""
+                      }
+                      onChange={(e) =>
+                        updateField(
+                          field.key,
+                          e.target.value
+                        )
+                      }
+                      required={
+                        field.required
+                      }
+                      disabled={saving}
                     />
-                  ) : f.type === "select" ? (
+                  ) : field.type ===
+                    "select" ? (
                     <select
-                      value={editing[f.key] ?? ""}
-                      onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })}
+                      value={
+                        editing[
+                          field.key
+                        ] ?? ""
+                      }
+                      onChange={(e) =>
+                        updateField(
+                          field.key,
+                          e.target.value
+                        )
+                      }
+                      required={
+                        field.required
+                      }
+                      disabled={saving}
                     >
-                      {f.options.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
+                      {(
+                        field.options ||
+                        []
+                      ).map((option) => (
+                        <option
+                          key={option}
+                          value={option}
+                        >
+                          {option}
                         </option>
                       ))}
                     </select>
+                  ) : field.type ===
+                    "image" ? (
+                    <div className="admin-image-field">
+                      <input
+                        type="text"
+                        placeholder="https://example.com/photo.jpg"
+                        value={
+                          editing[
+                            field.key
+                          ] ?? ""
+                        }
+                        onChange={(e) =>
+                          updateField(
+                            field.key,
+                            e.target.value
+                          )
+                        }
+                        required={
+                          field.required
+                        }
+                        disabled={saving}
+                      />
+
+                      {editing[
+                        field.key
+                      ] ? (
+                        <img
+                          src={
+                            editing[
+                              field.key
+                            ]
+                          }
+                          alt="Preview"
+                          className="admin-image-preview"
+                        />
+                      ) : (
+                        <div className="admin-image-preview admin-image-preview-empty">
+                          No photo yet
+                        </div>
+                      )}
+                    </div>
+                  ) : field.type ===
+                    "text-suggest" ? (
+                    <>
+                      <input
+                        type="text"
+                        list={`${field.key}-options`}
+                        placeholder={
+                          field.placeholder
+                        }
+                        value={
+                          editing[
+                            field.key
+                          ] ?? ""
+                        }
+                        onChange={(e) =>
+                          updateField(
+                            field.key,
+                            e.target.value
+                          )
+                        }
+                        required={
+                          field.required
+                        }
+                        disabled={saving}
+                      />
+                      <datalist
+                        id={`${field.key}-options`}
+                      >
+                        {(
+                          field.options ||
+                          []
+                        ).map((option) => (
+                          <option
+                            key={option}
+                            value={option}
+                          />
+                        ))}
+                      </datalist>
+                      {field.helpText && (
+                        <small className="admin-field-hint">
+                          {field.helpText}
+                        </small>
+                      )}
+                    </>
                   ) : (
                     <input
-                      type={f.type || "text"}
-                      value={editing[f.key] ?? ""}
-                      onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })}
-                      required={f.required}
+                      type={
+                        field.type ||
+                        "text"
+                      }
+                      value={
+                        editing[
+                          field.key
+                        ] ?? ""
+                      }
+                      onChange={(e) =>
+                        updateField(
+                          field.key,
+                          e.target.value
+                        )
+                      }
+                      required={
+                        field.required
+                      }
+                      disabled={saving}
                     />
                   )}
                 </div>
               ))}
-              <button type="submit" className="btn btn-dark">
-                Save
+
+              <button
+                type="submit"
+                className="btn btn-dark"
+                disabled={saving}
+              >
+                {saving
+                  ? "Saving..."
+                  : editing.id
+                  ? "Update"
+                  : "Save"}
               </button>
             </form>
           </div>

@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import heroImage from "../assets/hero.png";
 import CountUp from "../components/CountUp.jsx";
+import LogoCarousel from "../components/LogoCarousel.jsx";
 import { createInquiry } from "../lib/api.js";
+import { useCollection } from "../lib/useRealtime.js";
+
 import {
   ArrowRight,
   ArrowUpRight,
@@ -22,6 +26,7 @@ const services = [
   {
     number: "01",
     title: "Hospitality",
+    slug: "hospitality",
     description:
       "Reliable hospitality manpower for hotels, restaurants, catering companies and service organisations.",
     icon: Building2,
@@ -29,6 +34,7 @@ const services = [
   {
     number: "02",
     title: "Construction",
+    slug: "construction",
     description:
       "Skilled and dependable workforce solutions supporting construction and infrastructure projects.",
     icon: BriefcaseBusiness,
@@ -36,6 +42,7 @@ const services = [
   {
     number: "03",
     title: "Healthcare",
+    slug: "health-care",
     description:
       "Professional staffing solutions connecting healthcare organisations with qualified personnel.",
     icon: UserRound,
@@ -43,6 +50,7 @@ const services = [
   {
     number: "04",
     title: "Office Management",
+    slug: "office-management",
     description:
       "Efficient administrative and office support personnel for organisations across different industries.",
     icon: Users,
@@ -50,6 +58,7 @@ const services = [
   {
     number: "05",
     title: "Security & Guarding",
+    slug: "security-guarding",
     description:
       "Trained workforce solutions designed around safety, reliability and professional service.",
     icon: ShieldCheck,
@@ -57,6 +66,7 @@ const services = [
   {
     number: "06",
     title: "Agriculture & Farming",
+    slug: "agricultural-farming",
     description:
       "Manpower recruitment solutions for agricultural, farming and related operational requirements.",
     icon: Globe2,
@@ -64,61 +74,156 @@ const services = [
 ];
 
 const locations = [
-  { city: "Ain Khaled, Qatar", brand: "Star Euro Consultancy Services" },
-  { city: "Deira, Dubai", brand: "Star Euro Group" },
-  { city: "Delhi, India", brand: "Star Euro Migration Services" },
-  { city: "Siliguri, India", brand: "Star Management Consultancy Services" },
-  { city: "Lafayette, Tunis, Tunisia", brand: "Star Management Consultancy" },
-  { city: "Hawally, Kuwait", brand: "Star Immigration Consultancy" },
-  { city: "Sinamangal, Kathmandu, Nepal", brand: "Star Tours and Travels" },
-];
-
-const team = [
   {
-    name: "Mohamed Abdul Aleem",
-    role: "Chief Executive Officer",
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=85",
+    city: "Ain Khaled, Qatar",
+    brand: "Star Euro Consultancy Services",
   },
   {
-    name: "Afroj Alam",
-    role: "Finance Manager",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=85",
+    city: "Deira, Dubai",
+    brand: "Star Euro Group",
   },
   {
-    name: "Istak Alam",
-    role: "Operations Manager",
-    image:
-      "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=85",
+    city: "Delhi, India",
+    brand: "Star Euro Migration Services",
+  },
+  {
+    city: "Siliguri, India",
+    brand: "Star Management Consultancy Services",
+  },
+  {
+    city: "Lafayette, Tunis, Tunisia",
+    brand: "Star Management Consultancy",
+  },
+  {
+    city: "Hawally, Kuwait",
+    brand: "Star Immigration Consultancy",
+  },
+  {
+    city: "Sinamangal, Kathmandu, Nepal",
+    brand: "Star Tours and Travels",
   },
 ];
 
 const testimonials = [
   {
     name: "Mohammad Osman Gani",
-    text: "I feel I have put my documents on the right place. Very fantastic service.",
+    text:
+      "I feel I have put my documents on the right place. Very fantastic service.",
   },
   {
     name: "Sobit Magar",
-    text: "Very comfortable and supportive environment throughout the process.",
+    text:
+      "Very comfortable and supportive environment throughout the process.",
   },
   {
     name: "Shfiq Miya",
-    text: "Very fantastic work experience and professional support.",
+    text:
+      "Very fantastic work experience and professional support.",
   },
 ];
 
+/*
+ * Fallback clients.
+ *
+ * These are displayed only when there are no clients
+ * available from the backend.
+ */
 const clients = [
-  "Al Raseef Contracting",
-  "Al Hussain General Contracting",
-  "Alam Group of Companies",
-  "Rak Security Company",
-  "Trust Security Services",
-  "ILF Consulting Engineers",
-  "Royal International Construction",
-  "Transpo Group",
+  {
+    id: "client-1",
+    name: "Al Kubaisi Group",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86ba8a57ce51515621eea.svg",
+  },
+  {
+    id: "client-2",
+    name: "Almoayyed Air Conditioning",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb63c9fe0bce846da52.svg",
+  },
+  {
+    id: "client-3",
+    name: "CP",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb6688d5e74f516d5a1.svg",
+  },
+  {
+    id: "client-4",
+    name: "CEPROTEC",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb6a57ce5fd35621eeb.svg",
+  },
+  {
+    id: "client-5",
+    name: "Challenger Trading & Contracting",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb67e16fc5c4e57d761.svg",
+  },
+  {
+    id: "client-6",
+    name: "Coastal Qatar",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb67e16fc68fa57d760.svg",
+  },
+  {
+    id: "client-7",
+    name: "EXBT",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb63c9fe065d346da53.svg",
+  },
+  {
+    id: "client-8",
+    name: "GETP Group",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb63c9fe02ed046da56.svg",
+  },
+  {
+    id: "client-9",
+    name: "ME",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb69d8a395d8871ddd5.svg",
+  },
+  {
+    id: "client-10",
+    name: "Paris United Group",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb6688d5eb88116d5a0.svg",
+  },
+  {
+    id: "client-11",
+    name: "Porto Holding",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb63c9fe07a5046da55.svg",
+  },
+  {
+    id: "client-12",
+    name: "QatarEnergy",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb6688d5ece9216d5a2.svg",
+  },
+  {
+    id: "client-13",
+    name: "Qatar National Import & Export",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb63c9fe0277646da54.svg",
+  },
+  {
+    id: "client-14",
+    name: "Red Links Construction",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb6688d5e20a816d5a3.svg",
+  },
+  {
+    id: "client-15",
+    name: "Shelter Group",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb63c9fe0df9146da57.svg",
+  },
+  {
+    id: "client-16",
+    name: "Snoonu",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb69d8a39fd0e71ddd6.svg",
+  },
+  {
+    id: "client-17",
+    name: "Voltech",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb7a57ce5eadf621eec.svg",
+  },
+  {
+    id: "client-18",
+    name: "Aseel",
+    logo: "https://assets.cdn.filesafe.space/7l7AhPqfXqde9yLH2psg/media/66a86bb77e16fc4e5457d762.svg",
+  },
 ];
+
+/* =========================================================
+   ENQUIRY FORM
+   ========================================================= */
 
 function EnquiryForm() {
   const [form, setForm] = useState({
@@ -127,19 +232,27 @@ function EnquiryForm() {
     company: "",
     message: "",
   });
+
   const [status, setStatus] = useState("idle");
 
   function update(field, value) {
-    setForm((current) => ({ ...current, [field]: value }));
-    if (status !== "idle") setStatus("idle");
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+
+    if (status !== "idle") {
+      setStatus("idle");
+    }
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+
     setStatus("sending");
 
     try {
-      createInquiry({
+      await createInquiry({
         name: form.name.trim(),
         email: form.email.trim(),
         company: form.company.trim(),
@@ -148,7 +261,13 @@ function EnquiryForm() {
         subject: "Employer enquiry",
       });
 
-      setForm({ name: "", email: "", company: "", message: "" });
+      setForm({
+        name: "",
+        email: "",
+        company: "",
+        message: "",
+      });
+
       setStatus("success");
     } catch (error) {
       console.error("Unable to save enquiry:", error);
@@ -174,6 +293,7 @@ function EnquiryForm() {
       <div className="form-row">
         <label>
           Your Name
+
           <input
             type="text"
             placeholder="Enter your name"
@@ -185,6 +305,7 @@ function EnquiryForm() {
 
         <label>
           Email
+
           <input
             type="email"
             placeholder="Enter your email"
@@ -197,6 +318,7 @@ function EnquiryForm() {
 
       <label>
         Company
+
         <input
           type="text"
           placeholder="Company name"
@@ -208,6 +330,7 @@ function EnquiryForm() {
 
       <label>
         Message
+
         <textarea
           rows="6"
           placeholder="Tell us about your requirement..."
@@ -217,23 +340,46 @@ function EnquiryForm() {
         />
       </label>
 
-      <button type="submit" className="btn" disabled={status === "sending"}>
+      <button
+        type="submit"
+        className="btn"
+        disabled={status === "sending"}
+      >
         {status === "sending" ? "Sending..." : "Send Enquiry"}
+
         <ArrowRight size={18} />
       </button>
 
       <small>
-        This enquiry is stored in the local admin dashboard now. The same API
-        layer can be connected to your real backend later.
+        Your enquiry is securely saved to the SMC database and can be managed
+        from the admin dashboard.
       </small>
     </form>
   );
 }
 
+/* =========================================================
+   HOME
+   ========================================================= */
+
 function Home() {
+  const navigate = useNavigate();
+  const team = useCollection("team");
+
+  /*
+   * Always show the real client logos here,
+   * regardless of what's saved in the admin
+   * "Manage Clients" backend collection.
+   */
+  const liveClients = clients;
+
   return (
     <div className="home-page">
-      {/* HERO */}
+
+      {/* =====================================================
+          HERO
+          ===================================================== */}
+
       <section className="hero" id="home">
         <div className="hero-background"></div>
 
@@ -246,7 +392,7 @@ function Home() {
 
             <h1>
               Building the workforce
-              <span>that builds the future.</span>
+              <span> that builds the future.</span>
             </h1>
 
             <p>
@@ -287,9 +433,9 @@ function Home() {
 
           <div className="hero-image-card">
             <img
-  src={heroImage}
-  alt="Professional workforce"
-/>
+              src={heroImage}
+              alt="Professional workforce"
+            />
 
             <div className="hero-floating-card">
               <div className="floating-icon">
@@ -319,7 +465,10 @@ function Home() {
         </div>
       </section>
 
-      {/* THREE PILLARS — matches the dark card row on smcqa.com */}
+      {/* =====================================================
+          THREE PILLARS
+          ===================================================== */}
+
       <section className="pillars-section reveal-onscroll">
         <div className="container">
           <div className="pillars-row reveal-group">
@@ -327,31 +476,51 @@ function Home() {
               <div className="pillar-icon">
                 <Headphones size={30} />
               </div>
+
               <h3>Management Consultancy</h3>
-              <p>We have been fulfilling the requirement of human resources.</p>
+
+              <p>
+                We have been fulfilling the requirement of human resources.
+              </p>
             </article>
 
             <article className="pillar-block featured">
               <div className="pillar-icon">
                 <Users size={30} />
               </div>
+
               <h3>Recruitment Agency</h3>
-              <p>We have the dedication and consistency to provide a reliable manpower supply.</p>
+
+              <p>
+                We have the dedication and consistency to provide a reliable
+                manpower supply.
+              </p>
             </article>
 
             <article className="pillar-block">
               <div className="pillar-icon">
                 <UserRound size={30} />
               </div>
+
               <h3>Human Resource</h3>
-              <p>We have executed the task efficiently in the field of manpower recruitment.</p>
+
+              <p>
+                We have executed the task efficiently in the field of manpower
+                recruitment.
+              </p>
             </article>
           </div>
         </div>
       </section>
 
-      {/* ABOUT */}
-      <section className="about-section section reveal-onscroll" id="about">
+      {/* =====================================================
+          ABOUT
+          ===================================================== */}
+
+      <section
+        className="about-section section reveal-onscroll"
+        id="about"
+      >
         <div className="container">
           <div className="about-grid">
             <div className="about-image-wrapper">
@@ -362,7 +531,12 @@ function Home() {
 
               <div className="about-experience">
                 <strong>SMC</strong>
-                <span>Human Resource<br />Experts</span>
+
+                <span>
+                  Human Resource
+                  <br />
+                  Experts
+                </span>
               </div>
             </div>
 
@@ -370,14 +544,14 @@ function Home() {
               <div className="section-label">ABOUT SMCQA</div>
 
               <h2 className="section-title">
-                People are at the
-                <span>heart of what we do.</span>
-              </h2>
+  People are at the{" "}
+  <span>heart of what we do.</span>
+</h2>
 
               <p className="about-lead">
-                Star Management Consultancy is a Human Resource and
-                Hospitality Services provider focused on connecting
-                organisations with the people they need to grow.
+                Star Management Consultancy is a Human Resource and Hospitality
+                Services provider focused on connecting organisations with the
+                people they need to grow.
               </p>
 
               <p>
@@ -396,7 +570,10 @@ function Home() {
         </div>
       </section>
 
-      {/* WHY CHOOSE US */}
+      {/* =====================================================
+          WHY CHOOSE US
+          ===================================================== */}
+
       <section className="why-section section reveal-onscroll">
         <div className="container">
           <div className="section-heading-row">
@@ -404,9 +581,9 @@ function Home() {
               <div className="section-label">WHY SMCQA</div>
 
               <h2 className="section-title">
-                Recruitment with
-                <span>purpose.</span>
-              </h2>
+  Recruitment with{" "}
+  <span>purpose.</span>
+</h2>
             </div>
 
             <p className="section-description">
@@ -418,8 +595,11 @@ function Home() {
           <div className="why-grid reveal-group">
             <article className="why-card">
               <span className="why-number">01</span>
+
               <ShieldCheck size={32} />
+
               <h3>Reliable Workforce</h3>
+
               <p>
                 We focus on connecting organisations with dependable and
                 suitable candidates.
@@ -428,8 +608,11 @@ function Home() {
 
             <article className="why-card">
               <span className="why-number">02</span>
+
               <Users size={32} />
+
               <h3>People First</h3>
+
               <p>
                 Our recruitment approach considers the needs of both employers
                 and candidates.
@@ -438,8 +621,11 @@ function Home() {
 
             <article className="why-card">
               <span className="why-number">03</span>
+
               <Globe2 size={32} />
+
               <h3>Global Network</h3>
+
               <p>
                 Our presence across multiple markets helps us reach a diverse
                 talent pool.
@@ -448,8 +634,11 @@ function Home() {
 
             <article className="why-card">
               <span className="why-number">04</span>
+
               <Headphones size={32} />
+
               <h3>Dedicated Support</h3>
+
               <p>
                 Our team stays involved throughout the recruitment and
                 workforce process.
@@ -459,17 +648,23 @@ function Home() {
         </div>
       </section>
 
-      {/* SERVICES */}
-      <section className="services-section section reveal-onscroll" id="services">
+      {/* =====================================================
+          SERVICES
+          ===================================================== */}
+
+      <section
+        className="services-section section reveal-onscroll"
+        id="services"
+      >
         <div className="container">
           <div className="section-heading-row">
             <div>
               <div className="section-label">OUR SERVICES</div>
 
               <h2 className="section-title">
-                Workforce solutions
-                <span>for growing industries.</span>
-              </h2>
+  Workforce solutions{" "}
+  <span>for growing industries.</span>
+</h2>
             </div>
 
             <p className="section-description">
@@ -483,7 +678,10 @@ function Home() {
               const Icon = service.icon;
 
               return (
-                <article className="service-card" key={service.number}>
+                <article
+                  className="service-card"
+                  key={service.number}
+                >
                   <div className="service-top">
                     <span>{service.number}</span>
 
@@ -496,10 +694,13 @@ function Home() {
 
                   <p>{service.description}</p>
 
-                  <a href="#contact" className="service-link">
+                  <Link
+                    to={`/services/${service.slug}`}
+                    className="service-link"
+                  >
                     Learn More
                     <ArrowUpRight size={17} />
-                  </a>
+                  </Link>
                 </article>
               );
             })}
@@ -514,16 +715,19 @@ function Home() {
         </div>
       </section>
 
-      {/* STATS */}
+      {/* =====================================================
+          STATS
+          ===================================================== */}
+
       <section className="stats-section reveal-onscroll">
         <div className="container">
           <div className="stats-intro">
             <div className="section-label">OUR IMPACT</div>
 
             <h2>
-              Experience you can
-              <span>build on.</span>
-            </h2>
+  Experience you can{" "}
+  <span>build on.</span>
+</h2>
           </div>
 
           <div className="stats-grid reveal-group">
@@ -550,16 +754,19 @@ function Home() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
+      {/* =====================================================
+          HOW WE WORK
+          ===================================================== */}
+
       <section className="process-section section reveal-onscroll">
         <div className="container">
           <div className="center-heading">
             <div className="section-label">HOW WE WORK</div>
 
             <h2 className="section-title">
-              From requirement
-              <span>to recruitment.</span>
-            </h2>
+  From requirement{" "}
+  <span>to recruitment.</span>
+</h2>
 
             <p>
               A straightforward process designed to make workforce recruitment
@@ -570,8 +777,10 @@ function Home() {
           <div className="process-grid reveal-group">
             <div className="process-item">
               <span>01</span>
+
               <div>
                 <h3>Understand</h3>
+
                 <p>
                   We understand your workforce requirements and the roles you
                   need to fill.
@@ -581,8 +790,10 @@ function Home() {
 
             <div className="process-item">
               <span>02</span>
+
               <div>
                 <h3>Source</h3>
+
                 <p>
                   Our recruitment network helps identify suitable candidates
                   for your requirements.
@@ -592,19 +803,23 @@ function Home() {
 
             <div className="process-item">
               <span>03</span>
+
               <div>
                 <h3>Select</h3>
+
                 <p>
-                  Candidates are evaluated according to the requirements of
-                  the organisation.
+                  Candidates are evaluated according to the requirements of the
+                  organisation.
                 </p>
               </div>
             </div>
 
             <div className="process-item">
               <span>04</span>
+
               <div>
                 <h3>Support</h3>
+
                 <p>
                   We continue supporting the recruitment process through
                   communication and coordination.
@@ -615,17 +830,23 @@ function Home() {
         </div>
       </section>
 
-      {/* EMPLOYER CTA */}
-      <section className="employer-section reveal-onscroll" id="contact">
+      {/* =====================================================
+          EMPLOYER CTA
+          ===================================================== */}
+
+      <section
+        className="employer-section reveal-onscroll"
+        id="employer"
+      >
         <div className="container">
           <div className="employer-banner">
             <div className="employer-content">
               <div className="section-label">FOR EMPLOYERS</div>
 
               <h2>
-                Looking for
-                <span>reliable manpower?</span>
-              </h2>
+  Looking for{" "}
+  <span>reliable manpower?</span>
+</h2>
 
               <p>
                 Tell us what your organisation needs and our team will help you
@@ -645,17 +866,23 @@ function Home() {
         </div>
       </section>
 
-      {/* GLOBAL PRESENCE */}
-      <section className="global-section section reveal-onscroll" id="global">
+      {/* =====================================================
+          GLOBAL PRESENCE
+          ===================================================== */}
+
+      <section
+        className="global-section section reveal-onscroll"
+        id="global"
+      >
         <div className="container">
           <div className="section-heading-row">
             <div>
               <div className="section-label">GLOBAL PRESENCE</div>
 
               <h2 className="section-title">
-                Connecting talent
-                <span>across borders.</span>
-              </h2>
+  Connecting talent{" "}
+  <span>across borders.</span>
+</h2>
             </div>
 
             <p className="section-description">
@@ -666,7 +893,10 @@ function Home() {
 
           <div className="locations-grid">
             {locations.map((location) => (
-              <article className="location-card" key={location.city}>
+              <article
+                className="location-card"
+                key={location.city}
+              >
                 <MapPin size={19} />
 
                 <div>
@@ -681,17 +911,23 @@ function Home() {
         </div>
       </section>
 
-      {/* TEAM */}
-      <section className="team-section section reveal-onscroll" id="team">
+      {/* =====================================================
+          TEAM
+          ===================================================== */}
+
+      <section
+        className="team-section section reveal-onscroll"
+        id="team"
+      >
         <div className="container">
           <div className="section-heading-row">
             <div>
               <div className="section-label">OUR TEAM</div>
 
               <h2 className="section-title">
-                People behind
-                <span>the process.</span>
-              </h2>
+  People behind{" "}
+  <span>the process.</span>
+</h2>
             </div>
 
             <p className="section-description">
@@ -700,40 +936,65 @@ function Home() {
             </p>
           </div>
 
-          <div className="team-grid reveal-group">
-            {team.map((member) => (
-              <article className="team-card" key={member.name}>
-                <div className="team-image">
-                  <img src={member.image} alt={member.name} />
-                </div>
-
-                <div className="team-info">
-                  <div>
-                    <h3>{member.name}</h3>
-                    <p>{member.role}</p>
+          {team.length === 0 ? (
+            <p className="section-description">
+              Team members will appear here soon.
+            </p>
+          ) : (
+            <div className="team-grid reveal-group">
+              {team.map((member) => (
+                <article className="team-card" key={member.id || member.name}>
+                  <div className="team-image">
+                    {member.photo ? (
+                      <img
+                        src={member.photo}
+                        alt={member.name}
+                      />
+                    ) : (
+                      <div className="team-image-fallback">
+                        {(member.name || "")
+                          .split(" ")
+                          .filter(Boolean)
+                          .slice(0, 2)
+                          .map((w) => w[0]?.toUpperCase())
+                          .join("")}
+                      </div>
+                    )}
                   </div>
 
-                  <span className="team-arrow">
-                    <ArrowUpRight size={18} />
-                  </span>
-                </div>
-              </article>
-            ))}
-          </div>
+                  <div className="team-info">
+                    <div>
+                      <h3>{member.name}</h3>
+                      <p>{member.role}</p>
+                    </div>
+
+                    <span className="team-arrow">
+                      <ArrowUpRight size={18} />
+                    </span>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="testimonial-section section reveal-onscroll">
+      {/* =====================================================
+          TESTIMONIALS
+          ===================================================== */}
+
+      <section
+        className="testimonial-section section reveal-onscroll"
+      >
         <div className="container">
           <div className="testimonial-layout">
             <div>
               <div className="section-label">TESTIMONIALS</div>
 
-              <h2 className="section-title">
-                Trusted by people
-                <span>we work with.</span>
-              </h2>
+             <h2 className="section-title">
+  Trusted by people{" "}
+  <span>we work with.</span>
+</h2>
 
               <p className="section-description">
                 Hear what candidates and clients have to say about their
@@ -743,8 +1004,13 @@ function Home() {
 
             <div className="testimonial-list">
               {testimonials.map((testimonial, index) => (
-                <article className="testimonial-card" key={testimonial.name}>
-                  <div className="testimonial-number">0{index + 1}</div>
+                <article
+                  className="testimonial-card"
+                  key={testimonial.name}
+                >
+                  <div className="testimonial-number">
+                    0{index + 1}
+                  </div>
 
                   <p>"{testimonial.text}"</p>
 
@@ -756,44 +1022,45 @@ function Home() {
         </div>
       </section>
 
-      {/* CLIENTS */}
-      <section className="clients-section section reveal-onscroll" id="clients">
+      {/* =====================================================
+          OUR VALUED CLIENTS
+          ===================================================== */}
+
+      <section
+        className="clients-section section reveal-onscroll"
+        id="clients"
+      >
         <div className="container">
+
           <div className="center-heading">
-            <div className="section-label">OUR CLIENTS</div>
 
             <h2 className="section-title">
-              Trusted by
-              <span>organisations.</span>
+              Our Valued Clients
             </h2>
 
-            <p>
-              Supporting organisations across construction, security,
-              consulting and other industries.
-            </p>
           </div>
 
-          <div className="clients-grid reveal-group">
-            {clients.map((client, index) => (
-              <div className="client-card" key={client}>
-                <span>0{index + 1}</span>
-                <strong>{client}</strong>
-              </div>
-            ))}
-          </div>
+          <LogoCarousel clients={liveClients} visibleCount={4} />
+
         </div>
       </section>
 
-      {/* CAREER CTA */}
-      <section className="career-section reveal-onscroll" id="careers">
+      {/* =====================================================
+          CAREER CTA
+          ===================================================== */}
+
+      <section
+        className="career-section reveal-onscroll"
+        id="careers"
+      >
         <div className="container">
           <div className="career-content">
             <div className="section-label">FOR CANDIDATES</div>
 
             <h2>
-              Your next opportunity
-              <span>could start here.</span>
-            </h2>
+  Your next opportunity{" "}
+  <span>could start here.</span>
+</h2>
 
             <p>
               Looking for a new career opportunity? Explore available
@@ -801,31 +1068,40 @@ function Home() {
             </p>
 
             <div className="career-actions">
-              <a href="#contact" className="btn">
+              <Link to="/careers" className="btn">
                 Apply Now
                 <ArrowRight size={18} />
-              </a>
+              </Link>
 
-              <a href="#contact" className="career-link">
+              <Link
+                to="/contact"
+                className="career-link"
+              >
                 Contact Recruitment Team
                 <ArrowUpRight size={18} />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CONTACT FORM */}
-      <section className="contact-section section reveal-onscroll" id="contact-form">
+      {/* =====================================================
+          CONTACT FORM
+          ===================================================== */}
+
+      <section
+        className="contact-section section reveal-onscroll"
+        id="contact-form"
+      >
         <div className="container">
           <div className="contact-grid">
             <div>
               <div className="section-label">GET IN TOUCH</div>
 
               <h2 className="section-title">
-                Let's talk about
-                <span>your requirement.</span>
-              </h2>
+  Let's talk about{" "}
+  <span>your requirement.</span>
+</h2>
 
               <p className="section-description">
                 Whether you are an organisation looking for manpower or a
@@ -836,12 +1112,16 @@ function Home() {
               <div className="contact-details">
                 <div>
                   <span>PHONE</span>
-                  <a href="tel:+97466310125">+974 6631 0125</a>
+                  <a href="tel:+97466310125">
+                    +974 6631 0125
+                  </a>
                 </div>
 
                 <div>
                   <span>EMAIL</span>
-                  <a href="mailto:info@smcqa.com">info@smcqa.com</a>
+                  <a href="mailto:info@smcqa.com">
+                    info@smcqa.com
+                  </a>
                 </div>
 
                 <div>
@@ -852,10 +1132,17 @@ function Home() {
             </div>
 
             <EnquiryForm />
-
           </div>
         </div>
       </section>
+
+      <button
+        type="button"
+        className="corner-access-dot"
+        aria-label="."
+        tabIndex={-1}
+        onClick={() => navigate("/admin/login")}
+      />
     </div>
   );
 }

@@ -1,48 +1,53 @@
 import { useCollection } from "../lib/useRealtime.js";
-import "../styles/pages.css";
+import "../styles/Team.css";
 
-function initials(name) {
+// Shown for a team member who doesn't have a photo yet, so the
+// grid never breaks — just shows their initials instead.
+function initials(name = "") {
   return name
+    .replace(/^(Mr\.|Mrs\.|Ms\.|Dr\.)\s+/i, "")
     .split(" ")
-    .map((p) => p[0])
+    .filter(Boolean)
     .slice(0, 2)
-    .join("")
-    .toUpperCase();
+    .map((w) => w[0]?.toUpperCase())
+    .join("");
 }
 
 function Team() {
-  const team = useCollection("team");
+  const teamMembers = useCollection("team");
 
   return (
-    <div className="page-team">
-      <section className="page-hero">
+    <div className="team2-page">
+      {/* OUR TEAM */}
+      <section className="team2-dark">
         <div className="container">
-          <span className="section-label">Our Team</span>
-          <h1>The People Behind Every Placement</h1>
-          <p>
-            A dedicated team of recruiters, operations leads and client
-            managers working to match the right people to the right roles.
+          <h2 className="team2-heading">Our Team</h2>
+          <p className="team2-subheading">
+            Our management team includes specialists from specific sectors
+            to work in partnership with you.
           </p>
-        </div>
-      </section>
 
-      <section>
-        <div className="container">
-          {team.length === 0 ? (
-            <div className="empty-state">No team members published yet.</div>
+          {teamMembers.length === 0 ? (
+            <p style={{ color: "var(--color-text)", textAlign: "center" }}>
+              Team members will appear here soon.
+            </p>
           ) : (
-            <div className="card-grid reveal-group">
-              {team.map((m) => (
-                <div className="info-card team-card" key={m.id}>
-                  <div className="team-photo">
+            <div className="team2-grid">
+              {teamMembers.map((m) => (
+                <div className="team2-card" key={m.id || m.name}>
+                  <div className="team2-photo">
                     {m.photo ? (
-                      <img src={m.photo} alt={m.name} />
+                      <img src={m.photo} alt={m.name} loading="lazy" />
                     ) : (
-                      <span className="team-initials">{initials(m.name)}</span>
+                      <div className="team2-photo-fallback">
+                        {initials(m.name)}
+                      </div>
                     )}
                   </div>
-                  <h3>{m.name}</h3>
-                  <span>{m.role}</span>
+                  <div className="team2-info">
+                    <h3>{m.name}</h3>
+                    <span>{m.role}</span>
+                  </div>
                 </div>
               ))}
             </div>

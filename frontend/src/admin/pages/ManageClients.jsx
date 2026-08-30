@@ -10,7 +10,9 @@ function ManageClients() {
       fields={[
         { key: "name", label: "Client name", required: true },
         { key: "industry", label: "Industry", required: true },
+        { key: "logo", label: "Logo image URL", type: "text" },
       ]}
+      columns={["name", "industry", "logo"]}
       onCreate={createClient}
       onUpdate={editClient}
       onDelete={deleteClient}

@@ -24,7 +24,7 @@
  * ---------------------------------------------------------------------------
  */
 
-const STORAGE_KEY = "smcqa_db_v1";
+const STORAGE_KEY = "smcqa_db_v2";
 const channel =
   typeof window !== "undefined" && "BroadcastChannel" in window
     ? new BroadcastChannel("smcqa-sync")
@@ -34,14 +34,15 @@ const listeners = new Map(); // collection name -> Set of callbacks
 
 const seed = {
   services: [
-    { id: "s1", number: "01", title: "Hospitality", description: "Reliable hospitality manpower for hotels, restaurants, catering companies and service organisations.", icon: "Building2" },
-    { id: "s2", number: "02", title: "Construction", description: "Skilled and dependable workforce solutions supporting construction and infrastructure projects.", icon: "BriefcaseBusiness" },
-    { id: "s3", number: "03", title: "Healthcare", description: "Professional staffing solutions connecting healthcare organisations with qualified personnel.", icon: "UserRound" },
-    { id: "s4", number: "04", title: "Office Management", description: "Efficient administrative and office support personnel for organisations across different industries.", icon: "Users" },
-    { id: "s5", number: "05", title: "Security & Guarding", description: "Trained workforce solutions designed around safety, reliability and professional service.", icon: "ShieldCheck" },
-    { id: "s6", number: "06", title: "Agriculture & Farming", description: "Manpower recruitment solutions for agricultural, farming and related operational requirements.", icon: "Globe2" },
+    { id: "s1", number: "01", title: "Hospitality", description: "Reliable hospitality manpower for hotels, restaurants, catering companies and service organisations.", icon: "Building2", image: "hospitality-manager" },
+    { id: "s2", number: "02", title: "Construction", description: "Skilled and dependable workforce solutions supporting construction and infrastructure projects.", icon: "BriefcaseBusiness", image: "construction-site" },
+    { id: "s3", number: "03", title: "Health Care", description: "Professional staffing solutions connecting healthcare organisations with qualified personnel.", icon: "UserRound", image: "doctor-tablet" },
+    { id: "s4", number: "04", title: "Office Management", description: "Efficient administrative and office support personnel for organisations across different industries.", icon: "Users", image: "office-meeting" },
+    { id: "s5", number: "05", title: "Security & Guarding", description: "Trained workforce solutions designed around safety, reliability and professional service.", icon: "ShieldCheck", image: "security-guard-radio" },
+    { id: "s6", number: "06", title: "Agricultural & Farming", description: "Manpower recruitment solutions for agricultural, farming and related operational requirements.", icon: "Globe2", image: "farmer-field" },
+    { id: "s7", number: "07", title: "Sub Contracting Works", description: "End-to-end subcontracting manpower support, from skilled trades to full project crews.", icon: "Handshake", image: "handshake-hardhat" },
   ],
-    team: [
+  team: [
     { id: "t1", name: "Ahmed Al-Sayed", role: "Managing Director", photo: "https://i.pravatar.cc/300?img=12" },
     { id: "t2", name: "Fatima Noor", role: "HR & Recruitment Head", photo: "https://i.pravatar.cc/300?img=47" },
     { id: "t3", name: "Rashid Khan", role: "Operations Manager", photo: "https://i.pravatar.cc/300?img=33" },

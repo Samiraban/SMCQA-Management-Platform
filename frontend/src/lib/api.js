@@ -1,82 +1,284 @@
-/**
- * ---------------------------------------------------------------------------
- * API LAYER — this is the ONE file your backend friend needs to rewrite.
- * ---------------------------------------------------------------------------
- * Every function below currently talks to the local mock store (store.js).
- * Swap the body of each function for a real fetch()/axios call to your
- * backend, keep the same function name + same return shape, and nothing
- * else in the app (pages, admin panel, chatbot) needs to change.
- *
- * Example of what a real version looks like, once the backend exists:
- *
- *   export async function getJobs() {
- *     const res = await fetch(`${API_BASE}/jobs`);
- *     return res.json();
- *   }
- *
- *   export async function createInquiry(data) {
- *     const res = await fetch(`${API_BASE}/inquiries`, {
- *       method: "POST",
- *       headers: { "Content-Type": "application/json" },
- *       body: JSON.stringify(data),
- *     });
- *     return res.json();
- *   }
- * ---------------------------------------------------------------------------
- */
-import { addItem, removeItem, updateItem, updateContent, getCollection } from "./store.js";
+const API_BASE = (
+  import.meta.env.VITE_API_BASE ||
+  "http://localhost:5000/api"
+).replace(/\/$/, "");
 
-export const API_BASE = import.meta.env.VITE_API_BASE || "/api"; // used once real backend exists
+export { API_BASE };
 
-// Services
-export const getServices = () => getCollection("services");
-export const createService = (data) => addItem("services", data);
-export const editService = (id, patch) => updateItem("services", id, patch);
-export const deleteService = (id) => removeItem("services", id);
+function getToken() {
+  return localStorage.getItem("smcqa_token");
+}
 
-// Team
-export const getTeam = () => getCollection("team");
-export const createTeamMember = (data) => addItem("team", data);
-export const editTeamMember = (id, patch) => updateItem("team", id, patch);
-export const deleteTeamMember = (id) => removeItem("team", id);
+async function request(path, options = {}) {
+  const headers = new Headers(options.headers || {});
 
-// Clients
-export const getClients = () => getCollection("clients");
-export const createClient = (data) => addItem("clients", data);
-export const editClient = (id, patch) => updateItem("clients", id, patch);
-export const deleteClient = (id) => removeItem("clients", id);
+  if (
+    options.body !== undefined &&
+    !headers.has("Content-Type")
+  ) {
+    headers.set("Content-Type", "application/json");
+  }
 
-// Jobs / Careers
-export const getJobs = () => getCollection("jobs");
-export const createJob = (data) => addItem("jobs", { status: "Open", postedAt: Date.now(), ...data });
-export const editJob = (id, patch) => updateItem("jobs", id, patch);
-export const deleteJob = (id) => removeItem("jobs", id);
+  const token = getToken();
 
-// Applicants (job applications submitted from Careers page)
-export const getApplicants = () => getCollection("applicants");
-export const createApplicant = (data) => addItem("applicants", { submittedAt: Date.now(), status: "New", ...data });
-export const editApplicant = (id, patch) => updateItem("applicants", id, patch);
-export const deleteApplicant = (id) => removeItem("applicants", id);
+  if (token) {
+    headers.set(
+      "Authorization",
+      `Bearer ${token}`
+    );
+  }
 
-// Blog
-export const getBlogPosts = () => getCollection("blog");
-export const createBlogPost = (data) => addItem("blog", { publishedAt: Date.now(), ...data });
-export const editBlogPost = (id, patch) => updateItem("blog", id, patch);
-export const deleteBlogPost = (id) => removeItem("blog", id);
+  let response;
 
-// Contact form inquiries
-export const getInquiries = () => getCollection("inquiries");
-export const createInquiry = (data) => addItem("inquiries", { submittedAt: Date.now(), status: "New", ...data });
-export const editInquiry = (id, patch) => updateItem("inquiries", id, patch);
-export const deleteInquiry = (id) => removeItem("inquiries", id);
+  try {
+    response = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers,
+    });
+  } catch (error) {
+    console.error("Network error:", error);
 
-// Chatbot conversation log
-export const getChats = () => getCollection("chats");
-export const createChatMessage = (data) => addItem("chats", { sentAt: Date.now(), ...data });
+    throw new Error(
+      "Cannot connect to the backend. Make sure the backend is running on port 5000."
+    );
+  }
 
-// Editable site copy (hero text, about text, etc.)
-export const getSiteContent = () => getCollection("siteContent");
-export const saveSiteContent = (patch) => updateContent(patch);
+  const text = await response.text();
 
-// Live dashboard stats
-export const getStats = () => getCollection("stats");
+  let data = {};
+
+  try {
+    data = text ? JSON.parse(text) : {};
+  } catch {
+    data = {
+      message: text || "Invalid server response.",
+    };
+  }
+
+  if (!response.ok || data.success === false) {
+    if (response.status === 401) {
+      localStorage.removeItem("smcqa_token");
+      localStorage.removeItem("smcqa_user");
+    }
+
+    throw new Error(
+      data.message ||
+        `Request failed with status ${response.status}`
+    );
+  }
+
+  return data;
+}
+
+/* =========================================================
+   GENERIC COLLECTION HELPERS
+========================================================= */
+
+export async function getCollection(name) {
+  const result = await request(
+    `/content/${encodeURIComponent(name)}`
+  );
+
+  return (
+    result.data ??
+    (name === "siteContent" || name === "stats"
+      ? {}
+      : [])
+  );
+}
+
+async function createItem(collection, data) {
+  const result = await request(
+    `/content/${encodeURIComponent(collection)}`,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
+
+  return result.data;
+}
+
+async function updateItem(collection, id, data) {
+  const result = await request(
+    `/content/${encodeURIComponent(collection)}/${encodeURIComponent(id)}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }
+  );
+
+  return result.data;
+}
+
+async function deleteItem(collection, id) {
+  await request(
+    `/content/${encodeURIComponent(collection)}/${encodeURIComponent(id)}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  return true;
+}
+
+/* =========================================================
+   SERVICES
+========================================================= */
+
+export const getServices = () =>
+  getCollection("services");
+
+export const createService = (data) =>
+  createItem("services", data);
+
+export const editService = (id, data) =>
+  updateItem("services", id, data);
+
+export const deleteService = (id) =>
+  deleteItem("services", id);
+
+/* =========================================================
+   TEAM
+========================================================= */
+
+export const getTeam = () =>
+  getCollection("team");
+
+export const createTeamMember = (data) =>
+  createItem("team", data);
+
+export const editTeamMember = (id, data) =>
+  updateItem("team", id, data);
+
+export const deleteTeamMember = (id) =>
+  deleteItem("team", id);
+
+/* =========================================================
+   CLIENTS
+========================================================= */
+
+export const getClients = () =>
+  getCollection("clients");
+
+export const createClient = (data) =>
+  createItem("clients", data);
+
+export const editClient = (id, data) =>
+  updateItem("clients", id, data);
+
+export const deleteClient = (id) =>
+  deleteItem("clients", id);
+
+/* =========================================================
+   JOBS
+========================================================= */
+
+export const getJobs = () =>
+  getCollection("jobs");
+
+export const createJob = (data) =>
+  createItem("jobs", {
+    status: "Open",
+    postedAt: Date.now(),
+    ...data,
+  });
+
+export const editJob = (id, data) =>
+  updateItem("jobs", id, data);
+
+export const deleteJob = (id) =>
+  deleteItem("jobs", id);
+
+/* =========================================================
+   APPLICANTS
+========================================================= */
+
+export const getApplicants = () =>
+  getCollection("applicants");
+
+export const createApplicant = (data) =>
+  createItem("applicants", {
+    submittedAt: Date.now(),
+    status: "New",
+    ...data,
+  });
+
+export const editApplicant = (id, data) =>
+  updateItem("applicants", id, data);
+
+export const deleteApplicant = (id) =>
+  deleteItem("applicants", id);
+
+/* =========================================================
+   BLOG
+========================================================= */
+
+export const getBlogPosts = () =>
+  getCollection("blog");
+
+export const createBlogPost = (data) =>
+  createItem("blog", {
+    publishedAt: Date.now(),
+    ...data,
+  });
+
+export const editBlogPost = (id, data) =>
+  updateItem("blog", id, data);
+
+export const deleteBlogPost = (id) =>
+  deleteItem("blog", id);
+
+/* =========================================================
+   INQUIRIES
+========================================================= */
+
+export const getInquiries = () =>
+  getCollection("inquiries");
+
+export const createInquiry = (data) =>
+  createItem("inquiries", {
+    submittedAt: Date.now(),
+    status: "New",
+    ...data,
+  });
+
+export const editInquiry = (id, data) =>
+  updateItem("inquiries", id, data);
+
+export const deleteInquiry = (id) =>
+  deleteItem("inquiries", id);
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+export const getChats = () =>
+  getCollection("chats");
+
+export const createChatMessage = (data) =>
+  createItem("chats", {
+    sentAt: Date.now(),
+    ...data,
+  });
+
+/* =========================================================
+   SITE CONTENT
+========================================================= */
+
+export const getSiteContent = () =>
+  getCollection("siteContent");
+
+export const saveSiteContent = (data) =>
+  updateItem(
+    "siteContent",
+    "site-content",
+    data
+  );
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+export const getStats = () =>
+  getCollection("stats");

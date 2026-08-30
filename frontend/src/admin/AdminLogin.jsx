@@ -8,7 +8,7 @@ function AdminLogin() {
   const { isAuthed, login } = useAuth();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("admin@smcqa.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -19,14 +19,14 @@ function AdminLogin() {
     return <Navigate to="/admin" replace />;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     setError("");
     setIsLoading(true);
 
     try {
-      const result = login(email.trim(), password);
+      const result = await login(email.trim(), password);
 
       if (result.ok) {
         navigate("/admin", { replace: true });
@@ -80,7 +80,7 @@ function AdminLogin() {
               setError("");
             }}
             type="email"
-            placeholder="admin@smcqa.com"
+            placeholder="you@smcqa.com"
             autoComplete="username"
             required
           />
@@ -133,15 +133,6 @@ function AdminLogin() {
         >
           {isLoading ? "Signing in..." : "Sign in"}
         </button>
-
-        {/* Demo credentials */}
-        <p className="admin-login-hint">
-          Demo credentials:
-          <br />
-          <strong>admin@smcqa.com</strong>
-          {" / "}
-          <strong>admin123</strong>
-        </p>
 
         {/* Return to website */}
         <button

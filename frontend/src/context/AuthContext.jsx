@@ -1,42 +1,162 @@
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+} from "react";
 
-/**
- * Frontend-only admin session. Good enough to gate the /admin routes today.
- * When your friend's backend is ready, replace `login()` with a real call to
- * POST /api/auth/login, store the returned JWT instead of the boolean below,
- * and send it as an Authorization header from api.js.
- */
-const AuthContext = createContext(null);
+const AuthContext =
+  createContext(null);
 
-const DEMO_USER = { email: "admin@smcqa.com", password: "admin123" };
-const SESSION_KEY = "smcqa_admin_session";
+const TOKEN_KEY = "smcqa_token";
+const USER_KEY = "smcqa_user";
 
-export function AuthProvider({ children }) {
-  const [isAuthed, setIsAuthed] = useState(
-    () => sessionStorage.getItem(SESSION_KEY) === "1"
-  );
+const API_BASE = (
+  import.meta.env.VITE_API_BASE ||
+  "http://localhost:5000/api"
+).replace(/\/$/, "");
 
-  function login(email, password) {
-    if (email === DEMO_USER.email && password === DEMO_USER.password) {
-      sessionStorage.setItem(SESSION_KEY, "1");
-      setIsAuthed(true);
-      return { ok: true };
+export function AuthProvider({
+  children,
+}) {
+  const [token, setToken] =
+    useState(() =>
+      localStorage.getItem(
+        TOKEN_KEY
+      )
+    );
+
+  const [user, setUser] =
+    useState(() => {
+      try {
+        const raw =
+          localStorage.getItem(
+            USER_KEY
+          );
+
+        return raw
+          ? JSON.parse(raw)
+          : null;
+      } catch {
+        localStorage.removeItem(
+          USER_KEY
+        );
+
+        return null;
+      }
+    });
+
+  const isAuthed =
+    Boolean(token) &&
+    user?.role === "admin";
+
+  async function login(
+    email,
+    password
+  ) {
+    try {
+      const response =
+        await fetch(
+          `${API_BASE}/auth/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify({
+              email,
+              password,
+            }),
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if (
+        !response.ok ||
+        !data.success
+      ) {
+        return {
+          ok: false,
+          error:
+            data.message ||
+            "Invalid email or password.",
+        };
+      }
+
+      if (
+        data.user?.role !== "admin"
+      ) {
+        return {
+          ok: false,
+          error:
+            "This account does not have admin access.",
+        };
+      }
+
+      localStorage.setItem(
+        TOKEN_KEY,
+        data.token
+      );
+
+      localStorage.setItem(
+        USER_KEY,
+        JSON.stringify(
+          data.user
+        )
+      );
+
+      setToken(data.token);
+      setUser(data.user);
+
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      console.error(
+        "Login error:",
+        error
+      );
+
+      return {
+        ok: false,
+        error:
+          "Could not connect to the backend.",
+      };
     }
-    return { ok: false, error: "Invalid email or password." };
   }
 
   function logout() {
-    sessionStorage.removeItem(SESSION_KEY);
-    setIsAuthed(false);
+    localStorage.removeItem(
+      TOKEN_KEY
+    );
+
+    localStorage.removeItem(
+      USER_KEY
+    );
+
+    setToken(null);
+    setUser(null);
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthed, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isAuthed,
+        user,
+        token,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
 export function useAuth() {
-  return useContext(AuthContext);
+  return useContext(
+    AuthContext
+  );
 }

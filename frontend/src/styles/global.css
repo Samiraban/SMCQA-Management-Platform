@@ -1,3 +1,7 @@
+/* =========================================================
+   GLOBAL RESET
+   ========================================================= */
+
 * {
   margin: 0;
   padding: 0;
@@ -23,6 +27,10 @@ body::selection {
   color: var(--color-black);
 }
 
+::selection {
+  background: rgba(201, 150, 46, 0.28);
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -46,19 +54,26 @@ button {
   cursor: pointer;
 }
 
-::selection {
-  background: rgba(201, 150, 46, 0.28);
-}
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
 
 .container {
   width: min(calc(100% - 48px), var(--container-width));
   margin-inline: auto;
 }
 
+/* FIXED: Remove unnecessary space below navbar */
 main {
   position: relative;
-  padding-top: 126px;
+  padding-top: 0;
 }
+
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
 
 .section {
   padding: var(--section-padding) 0;
@@ -122,6 +137,11 @@ main {
   line-height: 1.85;
 }
 
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
 .btn {
   position: relative;
   display: inline-flex;
@@ -136,6 +156,7 @@ main {
   font-weight: 800;
   letter-spacing: 0.1px;
   overflow: hidden;
+
   transition:
     background var(--transition-normal),
     color var(--transition-normal),
@@ -148,7 +169,7 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
   transform: translateX(-105%);
   transition: transform 0.45s ease;
 }
@@ -202,6 +223,11 @@ main {
   transform: translateY(-3px);
 }
 
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -211,11 +237,16 @@ select:focus-visible {
   outline-offset: 3px;
 }
 
-/* Scroll reveal */
+
+/* =========================================================
+   SCROLL REVEAL
+   ========================================================= */
+
 .reveal-onscroll,
 .reveal-group {
   opacity: 0;
   transform: translateY(34px);
+
   transition:
     opacity 0.8s ease,
     transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
@@ -230,6 +261,7 @@ select:focus-visible {
 .reveal-group > * {
   opacity: 0;
   transform: translateY(24px);
+
   transition:
     opacity 0.7s ease,
     transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
@@ -240,11 +272,30 @@ select:focus-visible {
   transform: translateY(0);
 }
 
-.reveal-group.in > *:nth-child(2) { transition-delay: 0.08s; }
-.reveal-group.in > *:nth-child(3) { transition-delay: 0.16s; }
-.reveal-group.in > *:nth-child(4) { transition-delay: 0.24s; }
-.reveal-group.in > *:nth-child(5) { transition-delay: 0.32s; }
-.reveal-group.in > *:nth-child(6) { transition-delay: 0.40s; }
+.reveal-group.in > *:nth-child(2) {
+  transition-delay: 0.08s;
+}
+
+.reveal-group.in > *:nth-child(3) {
+  transition-delay: 0.16s;
+}
+
+.reveal-group.in > *:nth-child(4) {
+  transition-delay: 0.24s;
+}
+
+.reveal-group.in > *:nth-child(5) {
+  transition-delay: 0.32s;
+}
+
+.reveal-group.in > *:nth-child(6) {
+  transition-delay: 0.40s;
+}
+
+
+/* =========================================================
+   REVEAL ANIMATIONS
+   ========================================================= */
 
 .reveal,
 .reveal-up,
@@ -252,14 +303,30 @@ select:focus-visible {
 .reveal-right,
 .reveal-scale {
   opacity: 0;
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
 }
 
-.reveal { transform: translateY(35px); }
-.reveal-up { transform: translateY(45px); }
-.reveal-left { transform: translateX(-45px); }
-.reveal-right { transform: translateX(45px); }
-.reveal-scale { transform: scale(0.92); }
+.reveal {
+  transform: translateY(35px);
+}
+
+.reveal-up {
+  transform: translateY(45px);
+}
+
+.reveal-left {
+  transform: translateX(-45px);
+}
+
+.reveal-right {
+  transform: translateX(45px);
+}
+
+.reveal-scale {
+  transform: scale(0.92);
+}
 
 .reveal.in,
 .reveal-up.in,
@@ -269,6 +336,11 @@ select:focus-visible {
   opacity: 1;
   transform: none;
 }
+
+
+/* =========================================================
+   IMAGE HOVER
+   ========================================================= */
 
 .image-hover {
   overflow: hidden;
@@ -282,8 +354,15 @@ select:focus-visible {
   transform: scale(1.06);
 }
 
+
+/* =========================================================
+   CARD HOVER
+   ========================================================= */
+
 .hover-card {
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal);
 }
 
 .hover-card:hover {
@@ -291,18 +370,37 @@ select:focus-visible {
   box-shadow: var(--shadow-md);
 }
 
+
+/* =========================================================
+   PAGE TRANSITION
+   ========================================================= */
+
 @keyframes pageFade {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .page-transition {
   animation: pageFade 0.5s ease both;
 }
 
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
 @media (max-width: 900px) {
+
+  /* FIXED: Navbar is relative, so no extra top spacing */
   main {
-    padding-top: 72px;
+    padding-top: 0;
   }
 
   .container {
@@ -314,7 +412,13 @@ select:focus-visible {
   }
 }
 
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
 @media (max-width: 600px) {
+
   .container {
     width: min(calc(100% - 28px), var(--container-width));
   }
@@ -329,9 +433,20 @@ select:focus-visible {
   }
 }
 
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
