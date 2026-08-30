@@ -24,21 +24,58 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-const FRONTEND_URL =
-  process.env.FRONTEND_URL ||
-  "http://localhost:5173";
 
+/* =========================================================
+   CORS
+========================================================= */
 
-/* =========================
-   MIDDLEWARE
-========================= */
+const allowedOrigins = [
+  "https://smcqa-management-platform.vercel.app",
+  "http://localhost:5173",
+];
 
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin: function (origin, callback) {
+
+      // Allow requests without an Origin header
+      // Example: Postman or server-to-server requests
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      // Allow main production Vercel URL
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Allow Vercel preview deployments
+      if (
+        /^https:\/\/smcqa-management-platform-[a-z0-9-]+\.vercel\.app$/.test(
+          origin
+        )
+      ) {
+        return callback(null, true);
+      }
+
+      console.log(
+        "CORS blocked origin:",
+        origin
+      );
+
+      return callback(
+        new Error("Not allowed by CORS")
+      );
+    },
+
     credentials: true,
   })
 );
+
+
+/* =========================================================
+   BODY PARSER
+========================================================= */
 
 app.use(
   express.json({
@@ -47,9 +84,9 @@ app.use(
 );
 
 
-/* =========================
+/* =========================================================
    TEST ROUTES
-========================= */
+========================================================= */
 
 app.get("/", (req, res) => {
   res.json({
@@ -66,28 +103,49 @@ app.get("/api/health", (req, res) => {
 });
 
 
-/* =========================
+/* =========================================================
    API ROUTES
-========================= */
+========================================================= */
 
-app.use("/api/auth", authRoutes);
+app.use(
+  "/api/auth",
+  authRoutes
+);
 
-app.use("/api/contact", contactRoutes);
+app.use(
+  "/api/contact",
+  contactRoutes
+);
 
-app.use("/api/articles", articleRoutes);
+app.use(
+  "/api/articles",
+  articleRoutes
+);
 
-app.use("/api/gallery", galleryRoutes);
+app.use(
+  "/api/gallery",
+  galleryRoutes
+);
 
-app.use("/api/events", eventRoutes);
+app.use(
+  "/api/events",
+  eventRoutes
+);
 
-app.use("/api/admin", adminRoutes);
+app.use(
+  "/api/admin",
+  adminRoutes
+);
 
-app.use("/api/content", contentRoutes);
+app.use(
+  "/api/content",
+  contentRoutes
+);
 
 
-/* =========================
+/* =========================================================
    404 HANDLER
-========================= */
+========================================================= */
 
 app.use((req, res) => {
   res.status(404).json({
@@ -97,11 +155,12 @@ app.use((req, res) => {
 });
 
 
-/* =========================
+/* =========================================================
    ADMIN SETUP
-========================= */
+========================================================= */
 
 async function ensureAdmin() {
+
   const email = (
     process.env.ADMIN_EMAIL ||
     "admin@smcqa.com"
@@ -116,8 +175,12 @@ async function ensureAdmin() {
   });
 
   if (!user) {
+
     const hashedPassword =
-      await bcrypt.hash(password, 10);
+      await bcrypt.hash(
+        password,
+        10
+      );
 
     await User.create({
       name: "SMC Administrator",
@@ -130,7 +193,9 @@ async function ensureAdmin() {
     console.log(
       `Admin created: ${email}`
     );
+
   } else {
+
     if (user.role !== "admin") {
       user.role = "admin";
     }
@@ -148,32 +213,38 @@ async function ensureAdmin() {
 }
 
 
-/* =========================
+/* =========================================================
    START SERVER
-========================= */
+========================================================= */
 
 async function startServer() {
+
   try {
-    // Connect to MongoDB first
+
+    // Connect to MongoDB
     await connectDB();
 
-    // Start HTTP server immediately
+    // Start HTTP server
     app.listen(
       PORT,
       "0.0.0.0",
       () => {
+
         console.log(
           `SMCQA backend running on port ${PORT}`
         );
 
         console.log(
-          `Frontend allowed: ${FRONTEND_URL}`
+          `Allowed production origin: https://smcqa-management-platform.vercel.app`
         );
+
       }
     );
 
-    // Run setup tasks after server starts
+
+    // Run initial setup
     try {
+
       await ensureAdmin();
 
       await seedDefaults();
@@ -181,14 +252,18 @@ async function startServer() {
       console.log(
         "Initial setup completed successfully"
       );
+
     } catch (setupError) {
+
       console.error(
         "Initial setup error:",
         setupError
       );
+
     }
 
   } catch (error) {
+
     console.error(
       "Server startup failed:",
       error
