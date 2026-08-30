@@ -20,15 +20,18 @@ import {
 
 dotenv.config();
 
-const app =
-  express();
+const app = express();
 
-const PORT =
-  process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 const FRONTEND_URL =
   process.env.FRONTEND_URL ||
   "http://localhost:5173";
+
+
+/* =========================
+   MIDDLEWARE
+========================= */
 
 app.use(
   cors({
@@ -43,72 +46,60 @@ app.use(
   })
 );
 
+
+/* =========================
+   TEST ROUTES
+========================= */
+
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message:
-      "SMCQA Backend API is running",
+    message: "SMCQA Backend API is running",
   });
 });
 
-app.get(
-  "/api/health",
-  (req, res) => {
-    res.json({
-      success: true,
-      message:
-        "SMCQA API is healthy",
-    });
-  }
-);
+app.get("/api/health", (req, res) => {
+  res.json({
+    success: true,
+    message: "SMCQA API is healthy",
+  });
+});
 
-/* Existing backend routes */
-app.use(
-  "/api/auth",
-  authRoutes
-);
 
-app.use(
-  "/api/contact",
-  contactRoutes
-);
+/* =========================
+   API ROUTES
+========================= */
 
-app.use(
-  "/api/articles",
-  articleRoutes
-);
+app.use("/api/auth", authRoutes);
 
-app.use(
-  "/api/gallery",
-  galleryRoutes
-);
+app.use("/api/contact", contactRoutes);
 
-app.use(
-  "/api/events",
-  eventRoutes
-);
+app.use("/api/articles", articleRoutes);
 
-app.use(
-  "/api/admin",
-  adminRoutes
-);
+app.use("/api/gallery", galleryRoutes);
 
-/* New frontend/MongoDB API */
-app.use(
-  "/api/content",
-  contentRoutes
-);
+app.use("/api/events", eventRoutes);
 
-/* 404 */
-app.use(
-  (req, res) => {
-    res.status(404).json({
-      success: false,
-      message:
-        "API route not found.",
-    });
-  }
-);
+app.use("/api/admin", adminRoutes);
+
+app.use("/api/content", contentRoutes);
+
+
+/* =========================
+   404 HANDLER
+========================= */
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "API route not found.",
+  });
+});
+
+
+/* =========================
+   ADMIN SETUP
+========================= */
 
 async function ensureAdmin() {
   const email = (
@@ -120,28 +111,21 @@ async function ensureAdmin() {
     process.env.ADMIN_PASSWORD ||
     "Admin@12345";
 
-  let user =
-    await User.findOne({
-      email,
-    });
+  let user = await User.findOne({
+    email,
+  });
 
   if (!user) {
     const hashedPassword =
-      await bcrypt.hash(
-        password,
-        10
-      );
+      await bcrypt.hash(password, 10);
 
-    user =
-      await User.create({
-        name:
-          "SMC Administrator",
-        email,
-        password:
-          hashedPassword,
-        role: "admin",
-        isActive: true,
-      });
+    await User.create({
+      name: "SMC Administrator",
+      email,
+      password: hashedPassword,
+      role: "admin",
+      isActive: true,
+    });
 
     console.log(
       `Admin created: ${email}`
@@ -163,19 +147,23 @@ async function ensureAdmin() {
   }
 }
 
+
+/* =========================
+   START SERVER
+========================= */
+
 async function startServer() {
   try {
+    // Connect to MongoDB first
     await connectDB();
 
-    await ensureAdmin();
-
-    await seedDefaults();
-
+    // Start HTTP server immediately
     app.listen(
       PORT,
+      "0.0.0.0",
       () => {
         console.log(
-          `SMCQA backend running on http://localhost:${PORT}`
+          `SMCQA backend running on port ${PORT}`
         );
 
         console.log(
@@ -183,6 +171,23 @@ async function startServer() {
         );
       }
     );
+
+    // Run setup tasks after server starts
+    try {
+      await ensureAdmin();
+
+      await seedDefaults();
+
+      console.log(
+        "Initial setup completed successfully"
+      );
+    } catch (setupError) {
+      console.error(
+        "Initial setup error:",
+        setupError
+      );
+    }
+
   } catch (error) {
     console.error(
       "Server startup failed:",
