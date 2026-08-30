@@ -1,6 +1,6 @@
 const API_BASE = (
   import.meta.env.VITE_API_BASE ||
-  "http://localhost:5000/api"
+  "https://smcqa-management-platform.onrender.com/api"
 ).replace(/\/$/, "");
 
 export { API_BASE };
@@ -39,8 +39,8 @@ async function request(path, options = {}) {
     console.error("Network error:", error);
 
     throw new Error(
-      "Cannot connect to the backend. Make sure the backend is running on port 5000."
-    );
+  `Cannot connect to the backend at ${API_BASE}`
+);
   }
 
   const text = await response.text();
