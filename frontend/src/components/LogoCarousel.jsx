@@ -202,7 +202,7 @@ function LogoCarousel({
   return (
     <div
       className="valued-clients-carousel"
-      tabIndex={shouldSlide ? 0 : -1}.gi
+      tabIndex={shouldSlide ? 0 : -1}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
