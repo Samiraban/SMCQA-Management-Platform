@@ -1,5 +1,7 @@
-const API_BASE =
-  "https://smcqa-management-platform.onrender.com/api";
+const API_BASE = (
+  import.meta.env.VITE_API_BASE ||
+  "https://smcqa-management-platform.onrender.com/api"
+).replace(/\/$/, "");
 
 export { API_BASE };
 
