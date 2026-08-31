@@ -475,27 +475,37 @@ function ResourceManager({
                       )}
                     </>
                   ) : (
-                    <input
-                      type={
-                        field.type ||
-                        "text"
-                      }
-                      value={
-                        editing[
-                          field.key
-                        ] ?? ""
-                      }
-                      onChange={(e) =>
-                        updateField(
-                          field.key,
-                          e.target.value
-                        )
-                      }
-                      required={
-                        field.required
-                      }
-                      disabled={saving}
-                    />
+                    <>
+                      <input
+                        type={
+                          field.type ||
+                          "text"
+                        }
+                        placeholder={
+                          field.placeholder
+                        }
+                        value={
+                          editing[
+                            field.key
+                          ] ?? ""
+                        }
+                        onChange={(e) =>
+                          updateField(
+                            field.key,
+                            e.target.value
+                          )
+                        }
+                        required={
+                          field.required
+                        }
+                        disabled={saving}
+                      />
+                      {field.helpText && (
+                        <small className="admin-field-hint">
+                          {field.helpText}
+                        </small>
+                      )}
+                    </>
                   )}
                 </div>
               ))}
