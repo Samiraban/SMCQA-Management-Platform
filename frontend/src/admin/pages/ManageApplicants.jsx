@@ -1,5 +1,5 @@
 import ResourceManager from "../ResourceManager.jsx";
-import { editApplicant, deleteApplicant } from "../../lib/api.js";
+import { createApplicant, editApplicant, deleteApplicant } from "../../lib/api.js";
 
 function ManageApplicants() {
   return (
@@ -16,7 +16,7 @@ function ManageApplicants() {
         { key: "status", label: "Status", type: "select", options: ["New", "Reviewed", "Interviewing", "Hired", "Rejected"] },
         { key: "message", label: "Message", type: "textarea" },
       ]}
-      onCreate={() => {}}
+      onCreate={createApplicant}
       onUpdate={editApplicant}
       onDelete={deleteApplicant}
       enableReply
