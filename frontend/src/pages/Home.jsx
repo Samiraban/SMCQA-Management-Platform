@@ -19,59 +19,26 @@ import {
   UserRound,
   MapPin,
 } from "lucide-react";
+import * as Icons from "lucide-react";
 
 import "../styles/Home.css";
 
-const services = [
-  {
-    number: "01",
-    title: "Hospitality",
-    slug: "hospitality",
-    description:
-      "Reliable hospitality manpower for hotels, restaurants, catering companies and service organisations.",
-    icon: Building2,
-  },
-  {
-    number: "02",
-    title: "Construction",
-    slug: "construction",
-    description:
-      "Skilled and dependable workforce solutions supporting construction and infrastructure projects.",
-    icon: BriefcaseBusiness,
-  },
-  {
-    number: "03",
-    title: "Healthcare",
-    slug: "health-care",
-    description:
-      "Professional staffing solutions connecting healthcare organisations with qualified personnel.",
-    icon: UserRound,
-  },
-  {
-    number: "04",
-    title: "Office Management",
-    slug: "office-management",
-    description:
-      "Efficient administrative and office support personnel for organisations across different industries.",
-    icon: Users,
-  },
-  {
-    number: "05",
-    title: "Security & Guarding",
-    slug: "security-guarding",
-    description:
-      "Trained workforce solutions designed around safety, reliability and professional service.",
-    icon: ShieldCheck,
-  },
-  {
-    number: "06",
-    title: "Agriculture & Farming",
-    slug: "agricultural-farming",
-    description:
-      "Manpower recruitment solutions for agricultural, farming and related operational requirements.",
-    icon: Globe2,
-  },
-];
+/*
+ * Services used to be a hardcoded list here, so anything an admin
+ * added in /admin/services never showed up on the homepage (it only
+ * appeared on the /services page, which already read from the CMS).
+ * Now this section pulls the same live "services" collection, and
+ * resolves each item's stored icon name (e.g. "Building2") to the
+ * matching lucide-react component, falling back to Building2 if the
+ * name doesn't match a known icon.
+ */
+function slugify(title) {
+  return (title || "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
 
 const locations = [
   {
@@ -395,6 +362,7 @@ function Home() {
   const team = useCollection("team");
   const reviews = useCollection("reviews");
   const siteContent = useCollection("siteContent");
+  const services = useCollection("services");
 
   const stats = siteContent?.stats || {};
   const peopleRecruited = parseStat(stats.peopleRecruited, 20, "K+");
@@ -715,12 +683,13 @@ function Home() {
 
           <div className="services-grid reveal-group">
             {services.map((service) => {
-              const Icon = service.icon;
+              const Icon =
+                Icons[service.icon] || Building2;
 
               return (
                 <article
                   className="service-card"
-                  key={service.number}
+                  key={service.id}
                 >
                   <div className="service-top">
                     <span>{service.number}</span>
@@ -735,7 +704,10 @@ function Home() {
                   <p>{service.description}</p>
 
                   <Link
-                    to={`/services/${service.slug}`}
+                    to={`/services/${
+                      service.slug ||
+                      slugify(service.title)
+                    }`}
                     className="service-link"
                   >
                     Learn More

@@ -11,6 +11,11 @@ function CountUp({ value, suffix = "", duration = 1400 }) {
   const started = useRef(false);
 
   useEffect(() => {
+    // Reset the "already animated" flag whenever `value` changes so
+    // an admin-edited stat (fetched via polling) actually shows up,
+    // even if this section is already in view on the page.
+    started.current = false;
+
     const node = ref.current;
     if (!node) return;
 
