@@ -65,6 +65,28 @@ function Chatbot() {
     setStage("chat");
   }
 
+  function emailUs(e) {
+    // Let the mailto: link still try to open the user's default mail app —
+    // we don't preventDefault. But since that silently does nothing on
+    // machines with no mail client configured, we also copy the address
+    // to the clipboard and confirm it right in the chat, so there's always
+    // a way to get in touch either way.
+    const address = "info@smcqa.com";
+
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(address).catch(() => {});
+    }
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        from: "bot",
+        text: `Opening your email app now — if nothing happens, our email is ${address}. I've copied it to your clipboard so you can paste it anywhere.`,
+      },
+    ]);
+    setStage("chat");
+  }
+
   return (
     <div className="chatbot-widget">
       {open && (
@@ -103,7 +125,7 @@ function Chatbot() {
                   <a href="tel:+97466310125">
                     <Phone size={14} /> Call us
                   </a>
-                  <a href="mailto:info@smcqa.com">
+                  <a href="mailto:info@smcqa.com" onClick={emailUs}>
                     <Mail size={14} /> Email us
                   </a>
                 </div>
