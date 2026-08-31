@@ -747,10 +747,10 @@ function Home() {
           </div>
 
           <div className="service-bottom">
-            <a href="#contact" className="btn btn-dark">
+            <Link to="/contact" className="btn btn-dark">
               Discuss Your Requirement
               <ArrowRight size={18} />
-            </a>
+            </Link>
           </div>
         </div>
       </section>

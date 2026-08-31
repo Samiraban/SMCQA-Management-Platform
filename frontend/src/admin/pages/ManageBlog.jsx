@@ -7,8 +7,9 @@ function ManageBlog() {
       title="Manage Blog"
       description="Publish updates — they appear live on the Blog page instantly."
       collection="blog"
-      columns={["title", "excerpt", "author"]}
+      columns={["image", "title", "excerpt", "author"]}
       fields={[
+        { key: "image", label: "Cover Image", type: "image" },
         { key: "title", label: "Title", required: true },
         { key: "excerpt", label: "Short excerpt", type: "textarea", required: true },
         { key: "body", label: "Full article body", type: "textarea" },

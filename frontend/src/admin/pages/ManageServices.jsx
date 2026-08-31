@@ -73,8 +73,9 @@ function ManageServices() {
       title="Manage Services"
       description="These show up live on the Services page and homepage."
       collection="services"
-      columns={["number", "title", "icon"]}
+      columns={["image", "number", "title", "icon"]}
       fields={[
+        { key: "image", label: "Photo (optional — leave blank for an auto-picked stock photo)", type: "image" },
         { key: "number", label: "Number (e.g. 01)", required: true },
         { key: "title", label: "Title", required: true },
         { key: "description", label: "Description", type: "textarea", required: true },
