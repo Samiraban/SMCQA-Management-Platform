@@ -308,6 +308,15 @@ function Navbar() {
               </NavLink>
 
 
+              {/* REVIEWS */}
+              <NavLink
+                to="/reviews"
+                className={navClass}
+                onClick={closeMenu}
+              >
+                REVIEWS
+              </NavLink>
+
               {/* CONTACT US */}
               <NavLink
                 to="/contact"

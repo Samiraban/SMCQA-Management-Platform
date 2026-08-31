@@ -13,6 +13,7 @@ import galleryRoutes from "./routes/galleryRoutes.js";
 import eventRoutes from "./routes/eventRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import contentRoutes from "./routes/contentRoutes.js";
+import mailerRoutes from "./routes/mailerRoutes.js";
 
 import {
   seedDefaults,
@@ -140,6 +141,11 @@ app.use(
 app.use(
   "/api/content",
   contentRoutes
+);
+
+app.use(
+  "/api/mailer",
+  mailerRoutes
 );
 
 

@@ -19,6 +19,7 @@ function ManageInquiries() {
       onCreate={() => {}}
       onUpdate={editInquiry}
       onDelete={deleteInquiry}
+      enableReply
     />
   );
 }

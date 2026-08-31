@@ -14,6 +14,7 @@ import Team from "./pages/Team.jsx";
 import Careers from "./pages/Careers.jsx";
 import Contact from "./pages/Contact.jsx";
 import Blog from "./pages/Blog.jsx";
+import Reviews from "./pages/Reviews.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import AdminLayout from "./admin/AdminLayout.jsx";
 import AdminLogin from "./admin/AdminLogin.jsx";
@@ -53,6 +54,7 @@ function App() {
         <Route path="/careers" element={<SiteLayout><Careers /></SiteLayout>} />
         <Route path="/contact" element={<SiteLayout><Contact /></SiteLayout>} />
         <Route path="/blog" element={<SiteLayout><Blog /></SiteLayout>} />
+        <Route path="/reviews" element={<SiteLayout><Reviews /></SiteLayout>} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<RequireAuth><AdminLayout /></RequireAuth>}>
           <Route index element={<Dashboard />} />

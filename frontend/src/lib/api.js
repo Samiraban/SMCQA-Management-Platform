@@ -297,3 +297,13 @@ export const saveSiteContent = (data) =>
 
 export const getStats = () =>
   getCollection("stats");
+
+/* =========================================================
+   MAILER (admin "Reply" button on Inquiries/Applicants)
+========================================================= */
+
+export const sendReplyEmail = (data) =>
+  request("/mailer/reply", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });

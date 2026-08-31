@@ -19,6 +19,7 @@ function ManageApplicants() {
       onCreate={() => {}}
       onUpdate={editApplicant}
       onDelete={deleteApplicant}
+      enableReply
     />
   );
 }

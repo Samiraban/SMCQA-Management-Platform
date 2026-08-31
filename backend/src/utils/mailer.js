@@ -133,3 +133,50 @@ export function notifyNewInquiry(inquiry) {
     replyTo: inquiry.email,
   });
 }
+
+/**
+ * Sends a direct email FROM the company TO a customer/applicant.
+ * Used by the admin panel's "Reply" button on Inquiries/Applicants.
+ * Unlike sendAdminNotification, this DOES report success/failure back
+ * to the caller so the admin panel can show whether it actually sent.
+ */
+export async function sendReplyEmail({ to, subject, message }) {
+  try {
+    const activeTransporter = getTransporter();
+
+    if (!activeTransporter) {
+      return {
+        sent: false,
+        reason: "SMTP settings are missing on the server.",
+      };
+    }
+
+    const from = process.env.MAIL_FROM || process.env.SMTP_USER;
+    const replyTo = process.env.MAIL_TO || "info@smcqa.com";
+
+    const html = `
+      <div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.6;color:#202020;">
+        ${escapeHtml(message).replace(/\n/g, "<br />")}
+      </div>
+      <p style="font-family:Arial,sans-serif;font-size:12px;color:#999;margin-top:24px;">
+        Star Management Consultancy — smcqa.com
+      </p>
+    `;
+
+    await activeTransporter.sendMail({
+      from: `"SMCQA" <${from}>`,
+      to,
+      replyTo,
+      subject,
+      html,
+    });
+
+    console.log(`Reply email sent -> ${to}`);
+
+    return { sent: true };
+  } catch (error) {
+    console.error("Mailer error (reply not sent):", error.message);
+
+    return { sent: false, reason: error.message };
+  }
+}

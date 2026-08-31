@@ -4,9 +4,11 @@ import {
   Pencil,
   Trash2,
   X,
+  Reply,
 } from "lucide-react";
 
 import { useCollection } from "../lib/useRealtime.js";
+import ReplyModal from "./ReplyModal.jsx";
 
 function ResourceManager({
   title,
@@ -17,12 +19,16 @@ function ResourceManager({
   onUpdate,
   onDelete,
   columns,
+  enableReply = false,
 }) {
   const items = useCollection(
     collection
   );
 
   const [editing, setEditing] =
+    useState(null);
+
+  const [replyingTo, setReplyingTo] =
     useState(null);
 
   const [saving, setSaving] =
@@ -226,6 +232,20 @@ function ResourceManager({
                   )}
 
                   <td className="admin-table-actions">
+                    {enableReply && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setReplyingTo(item)
+                        }
+                        aria-label="Reply"
+                        title="Reply by email or WhatsApp"
+                        disabled={saving}
+                      >
+                        <Reply size={15} />
+                      </button>
+                    )}
+
                     <button
                       type="button"
                       onClick={() =>
@@ -494,6 +514,13 @@ function ResourceManager({
             </form>
           </div>
         </div>
+      )}
+
+      {replyingTo && (
+        <ReplyModal
+          item={replyingTo}
+          onClose={() => setReplyingTo(null)}
+        />
       )}
     </div>
   );

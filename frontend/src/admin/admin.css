@@ -552,3 +552,45 @@
   background: #fdf3e3;
   color: #a8641a;
 }
+
+/* ---------- Reply modal (Inquiries / Applicants) ---------- */
+.reply-modal-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.reply-modal-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-off-white);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.reply-modal-tab.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.reply-modal-tab:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.reply-modal-success {
+  margin-top: 14px;
+  background: #eef8ee;
+  color: #2c7a2c;
+  border: 1px solid #cdebcd;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+}
