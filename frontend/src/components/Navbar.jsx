@@ -15,6 +15,7 @@ import {
   InstagramIcon,
   LinkedinIcon,
 } from "./SocialIcons.jsx";
+import { useMailtoFeedback } from "../lib/useMailtoFeedback.js";
 
 import "../styles/Navbar.css";
 
@@ -52,6 +53,11 @@ const serviceLinks = [
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+
+  const {
+    handleClick: handleEmailClick,
+    copied: emailCopied,
+  } = useMailtoFeedback("info@smcqa.com");
 
   // Forces the PDF to actually download instead of opening in a new tab.
   const handleDownloadProfile = async () => {
@@ -99,9 +105,21 @@ function Navbar() {
               <span>(+974) 6631 0125</span>
             </a>
 
-            <a href="mailto:info@smcqa.com">
+            <a
+              href="mailto:info@smcqa.com"
+              onClick={handleEmailClick}
+              title={
+                emailCopied
+                  ? "Copied to clipboard!"
+                  : "Email us"
+              }
+            >
               <Mail size={18} />
-              <span>info@smcqa.com</span>
+              <span>
+                {emailCopied
+                  ? "Copied! info@smcqa.com"
+                  : "info@smcqa.com"}
+              </span>
             </a>
 
           </div>

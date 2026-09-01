@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Mail, MapPin, Phone, ArrowUpRight } from "lucide-react";
 import companyLogo from "../assets/smc-logo.png";
 import { FacebookIcon, InstagramIcon, LinkedinIcon } from "./SocialIcons.jsx";
+import { useMailtoFeedback } from "../lib/useMailtoFeedback.js";
 import "../styles/Footer.css";
 
 const services = [
@@ -14,6 +15,11 @@ const services = [
 ];
 
 function Footer() {
+  const {
+    handleClick: handleEmailClick,
+    copied: emailCopied,
+  } = useMailtoFeedback("info@smcqa.com");
+
   return (
     <footer className="site-footer">
       <div className="footer-main">
@@ -70,9 +76,22 @@ function Footer() {
               <Phone size={18} />
               <span>+974 6631 0125<br />+974 41436428</span>
             </a>
-            <a className="footer-contact-item" href="mailto:info@smcqa.com">
+            <a
+              className="footer-contact-item"
+              href="mailto:info@smcqa.com"
+              onClick={handleEmailClick}
+              title={
+                emailCopied
+                  ? "Copied to clipboard!"
+                  : "Email us"
+              }
+            >
               <Mail size={18} />
-              <span>info@smcqa.com</span>
+              <span>
+                {emailCopied
+                  ? "Copied! info@smcqa.com"
+                  : "info@smcqa.com"}
+              </span>
             </a>
           </div>
         </div>

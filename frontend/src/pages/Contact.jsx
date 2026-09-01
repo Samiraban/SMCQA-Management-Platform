@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { createInquiry } from "../lib/api.js";
 import countryCodes from "../data/countryCodes.js";
+import { useMailtoFeedback } from "../lib/useMailtoFeedback.js";
 import "../styles/Contact.css";
 
 const DEFAULT_DIAL_CODE = "+974"; // Qatar — matches the office location below
@@ -19,6 +20,11 @@ function Contact() {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
+
+  const {
+    handleClick: handleEmailClick,
+    copied: emailCopied,
+  } = useMailtoFeedback("info@smcqa.com");
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -102,7 +108,19 @@ function Contact() {
                 </div>
                 <div className="contact2-locate-label">Mail Us</div>
                 <p>
-                  <a href="mailto:info@smcqa.com">info@smcqa.com</a>
+                  <a
+                    href="mailto:info@smcqa.com"
+                    onClick={handleEmailClick}
+                    title={
+                      emailCopied
+                        ? "Copied to clipboard!"
+                        : "Email us"
+                    }
+                  >
+                    {emailCopied
+                      ? "Copied! info@smcqa.com"
+                      : "info@smcqa.com"}
+                  </a>
                 </p>
               </div>
             </div>

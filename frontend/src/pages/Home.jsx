@@ -5,6 +5,7 @@ import CountUp from "../components/CountUp.jsx";
 import LogoCarousel from "../components/LogoCarousel.jsx";
 import { createInquiry } from "../lib/api.js";
 import { useCollection } from "../lib/useRealtime.js";
+import { useMailtoFeedback } from "../lib/useMailtoFeedback.js";
 
 import {
   ArrowRight,
@@ -365,6 +366,11 @@ function Home() {
   const reviews = useCollection("reviews");
   const siteContent = useCollection("siteContent");
   const services = useCollection("services");
+
+  const {
+    handleClick: handleEmailClick,
+    copied: emailCopied,
+  } = useMailtoFeedback("info@smcqa.com");
 
   const stats = siteContent?.stats || {};
   const peopleRecruited = parseStat(stats.peopleRecruited, 20, "K+");
@@ -1153,8 +1159,18 @@ function Home() {
 
                 <div>
                   <span>EMAIL</span>
-                  <a href="mailto:info@smcqa.com">
-                    info@smcqa.com
+                  <a
+                    href="mailto:info@smcqa.com"
+                    onClick={handleEmailClick}
+                    title={
+                      emailCopied
+                        ? "Copied to clipboard!"
+                        : "Email us"
+                    }
+                  >
+                    {emailCopied
+                      ? "Copied! info@smcqa.com"
+                      : "info@smcqa.com"}
                   </a>
                 </div>
 
