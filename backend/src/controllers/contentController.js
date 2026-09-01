@@ -496,6 +496,42 @@ export async function createCollectionItem(
         "New";
     }
 
+    // SERVICES: the admin no longer types the "number" (01, 02, 03...)
+    // by hand — it's assigned automatically based on how many services
+    // already exist, so it always matches the real count/order.
+    if (collection === "services") {
+      const existingServices =
+        await Content.find({
+          collection: "services",
+        })
+          .select("data.number")
+          .lean();
+
+      let highestNumber = 0;
+
+      existingServices.forEach(
+        (doc) => {
+          const parsed = parseInt(
+            doc?.data?.number,
+            10
+          );
+
+          if (
+            Number.isFinite(
+              parsed
+            ) &&
+            parsed > highestNumber
+          ) {
+            highestNumber = parsed;
+          }
+        }
+      );
+
+      data.number = String(
+        highestNumber + 1
+      ).padStart(2, "0");
+    }
+
     if (collection === "blog") {
       data.publishedAt ||=
         Date.now();

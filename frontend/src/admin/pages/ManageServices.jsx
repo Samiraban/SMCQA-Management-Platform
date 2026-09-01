@@ -9,7 +9,7 @@ function ManageServices() {
   return (
     <ResourceManager
       title="Manage Services"
-      description="These show up live on the Services page and homepage. Add sub-categories (e.g. Front Office, Culinary under Hospitality) and manage the photo gallery shown on each service's detail page."
+      description="These show up live on the Services page and homepage. The service number (01, 02, 03...) is assigned automatically based on how many services already exist — you don't need to type it. Add sub-categories (e.g. Front Office, Culinary under Hospitality), a photo for each sub-category, and manage the photo gallery shown on each service's detail page."
       collection="services"
       columns={[
         "image",
@@ -23,12 +23,6 @@ function ManageServices() {
           key: "image",
           label: "Card Photo (optional — leave blank for an auto-picked stock photo)",
           type: "image",
-        },
-
-        {
-          key: "number",
-          label: "Number (e.g. 01)",
-          required: true,
         },
 
         {
@@ -69,6 +63,11 @@ function ManageServices() {
           helpText:
             "e.g. for Construction: Site Labour, Skilled Trades, Site Supervisors.",
           itemFields: [
+            {
+              key: "image",
+              label: "Photo (optional)",
+              type: "image",
+            },
             {
               key: "title",
               label: "Sub-category name",

@@ -14,6 +14,8 @@ import {
   seedDefaults,
 } from "./controllers/contentController.js";
 
+import { verifyMailer } from "./utils/mailer.js";
+
 dotenv.config();
 
 const app = express();
@@ -224,6 +226,11 @@ async function startServer() {
       await ensureAdmin();
 
       await seedDefaults();
+
+      // Test the SMTP connection right away so a bad/missing
+      // Gmail App Password shows up clearly in the logs instead
+      // of failing silently on every enquiry/application form.
+      await verifyMailer();
 
       console.log(
         "Initial setup completed successfully"

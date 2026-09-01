@@ -88,6 +88,15 @@ function ServiceDetail({
                   className="service-subcategory-card"
                   key={`${title}-sub-${index}`}
                 >
+                  {sub.image && (
+                    <div className="service-subcategory-photo">
+                      <img
+                        src={sub.image}
+                        alt={sub.title || `${title} specialisation ${index + 1}`}
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
                   <h3>{sub.title}</h3>
                   {sub.description && <p>{sub.description}</p>}
                 </div>

@@ -232,11 +232,74 @@ function ResourceManager({
     );
   }
 
-  function getLabel(key) {
-    return (
-      fields.find((field) => field.key === key)
-        ?.label || key
+  /* ---------------------------------------------------------
+     REPEATER ROW IMAGE UPLOAD
+     Lets a single row inside a repeater (e.g. a sub-category)
+     have its own uploaded photo.
+     --------------------------------------------------------- */
+  function repeaterUploadKey(field, index, itemField) {
+    return `${field.key}-${index}-${itemField.key}`;
+  }
+
+  async function handleRepeaterImageUpload(
+    field,
+    index,
+    itemField,
+    fileList
+  ) {
+    const file = fileList?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const uploadKey = repeaterUploadKey(
+      field,
+      index,
+      itemField
     );
+
+    setError("");
+    setUploadingKey(uploadKey);
+
+    try {
+      const dataUrl = await fileToImageDataUrl(file, {
+        maxSize: 1600,
+      });
+
+      updateRepeaterRow(
+        field,
+        index,
+        itemField.key,
+        dataUrl
+      );
+    } catch (uploadError) {
+      console.error(
+        "Sub-item image upload failed:",
+        uploadError
+      );
+      setError(
+        uploadError.message ||
+          "Unable to use that image."
+      );
+    } finally {
+      setUploadingKey("");
+    }
+  }
+
+  function getLabel(key) {
+    const match = fields.find(
+      (field) => field.key === key
+    )?.label;
+
+    if (match) {
+      return match;
+    }
+
+    // Fallback for columns that aren't editable fields
+    // (e.g. an auto-generated "number" column) — just
+    // capitalize the key instead of showing it raw.
+    return key.charAt(0).toUpperCase() + key.slice(1);
   }
 
   function formatValue(value) {
@@ -768,7 +831,93 @@ function ResourceManager({
                               ).map(
                                 (itemField) =>
                                   itemField.type ===
-                                  "textarea" ? (
+                                  "image" ? (
+                                    <div
+                                      className="admin-repeater-image-field"
+                                      key={
+                                        itemField.key
+                                      }
+                                    >
+                                      {row[
+                                        itemField
+                                          .key
+                                      ] ? (
+                                        <img
+                                          src={
+                                            row[
+                                              itemField
+                                                .key
+                                            ]
+                                          }
+                                          alt=""
+                                          className="admin-repeater-image-preview"
+                                        />
+                                      ) : (
+                                        <div className="admin-repeater-image-preview admin-repeater-image-preview-empty">
+                                          No photo
+                                        </div>
+                                      )}
+
+                                      <label
+                                        className={`btn-upload${
+                                          uploadingKey ===
+                                          repeaterUploadKey(
+                                            field,
+                                            index,
+                                            itemField
+                                          )
+                                            ? " is-busy"
+                                            : ""
+                                        }`}
+                                      >
+                                        <ImagePlus
+                                          size={
+                                            14
+                                          }
+                                        />
+
+                                        {uploadingKey ===
+                                        repeaterUploadKey(
+                                          field,
+                                          index,
+                                          itemField
+                                        )
+                                          ? "Uploading…"
+                                          : row[
+                                              itemField
+                                                .key
+                                            ]
+                                          ? "Change photo"
+                                          : "Add photo"}
+
+                                        <input
+                                          type="file"
+                                          accept="image/*"
+                                          hidden
+                                          disabled={
+                                            saving ||
+                                            !!uploadingKey
+                                          }
+                                          onChange={(
+                                            e
+                                          ) => {
+                                            handleRepeaterImageUpload(
+                                              field,
+                                              index,
+                                              itemField,
+                                              e
+                                                .target
+                                                .files
+                                            );
+
+                                            e.target.value =
+                                              "";
+                                          }}
+                                        />
+                                      </label>
+                                    </div>
+                                  ) : itemField.type ===
+                                    "textarea" ? (
                                     <textarea
                                       key={
                                         itemField.key

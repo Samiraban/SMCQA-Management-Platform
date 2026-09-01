@@ -24,12 +24,55 @@ function getTransporter() {
     port: Number(SMTP_PORT) || 587,
     secure: Number(SMTP_PORT) === 465, // true for port 465, false for 587/other
     auth: {
-      user: SMTP_USER,
-      pass: SMTP_PASS,
+      // Trimmed defensively — a stray space or newline pasted into .env
+      // (very easy to do with a Gmail App Password) makes auth fail
+      // with no obvious clue why.
+      user: SMTP_USER.trim(),
+      pass: SMTP_PASS.trim().replace(/\s+/g, ""),
     },
   });
 
   return transporter;
+}
+
+/**
+ * Verifies the SMTP connection/credentials and logs a clear result.
+ * Call this once when the server boots so a bad Gmail App Password
+ * (or missing .env values) shows up immediately in the server logs
+ * instead of failing silently on every single form submission.
+ */
+export async function verifyMailer() {
+  const activeTransporter = getTransporter();
+
+  if (!activeTransporter) {
+    console.warn(
+      "Mailer: not configured — SMTP_HOST / SMTP_USER / SMTP_PASS are missing. " +
+        "Admin notification emails will NOT be sent until these are set."
+    );
+    return false;
+  }
+
+  try {
+    await activeTransporter.verify();
+
+    console.log(
+      `Mailer: connected to ${process.env.SMTP_HOST} as ${process.env.SMTP_USER} — notification emails are enabled.`
+    );
+
+    return true;
+  } catch (error) {
+    console.error(
+      "Mailer: SMTP connection FAILED — notification emails will NOT be sent.",
+      "\n  Reason:",
+      error.message,
+      "\n  This almost always means the SMTP_USER / SMTP_PASS in .env are wrong.",
+      "\n  For Gmail: SMTP_USER must be the full Gmail address, and SMTP_PASS must be a 16-character",
+      "\n  App Password (Google Account > Security > 2-Step Verification > App passwords) — a normal",
+      "\n  Gmail login password will NOT work here."
+    );
+
+    return false;
+  }
 }
 
 /**
