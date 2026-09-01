@@ -10,6 +10,7 @@ function ServiceDetail({
   description,
   paragraphs = [],
   images = [],
+  subcategories = [],
   icon,
 }) {
   const Icon = Icons[icon] || Icons.Briefcase;
@@ -73,6 +74,28 @@ function ServiceDetail({
           </div>
         </div>
       </section>
+
+      {subcategories.length > 0 && (
+        <section>
+          <div className="container">
+            <div className="service-subcategories-heading">
+              <h2>{title} Specialisations</h2>
+            </div>
+
+            <div className="service-subcategories-grid">
+              {subcategories.map((sub, index) => (
+                <div
+                  className="service-subcategory-card"
+                  key={`${title}-sub-${index}`}
+                >
+                  <h3>{sub.title}</h3>
+                  {sub.description && <p>{sub.description}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="page-about">
         <div className="container about-cta-inner">

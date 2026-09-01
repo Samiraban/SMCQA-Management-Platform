@@ -209,15 +209,42 @@ function Services() {
         activeService.title
       );
 
-    const galleryImages = getGallery(
-      staticContent?.category || "hospitality",
-      10
-    );
+    /* -------------------------------------------------------
+       GALLERY IMAGES
+       Photos an admin has uploaded for this service (in
+       Admin → Services → Photo Gallery) always take priority.
+       Only fall back to the auto-picked stock photos when the
+       admin hasn't uploaded any photos yet.
+       ------------------------------------------------------- */
+
+    const adminUploadedGallery = Array.isArray(
+      activeService.gallery
+    )
+      ? activeService.gallery
+      : [];
+
+    const galleryImages =
+      adminUploadedGallery.length > 0
+        ? adminUploadedGallery.map((url) => ({
+            url,
+            fallback: url,
+          }))
+        : getGallery(
+            staticContent?.category || "hospitality",
+            10
+          );
+
+    const subcategories = Array.isArray(
+      activeService.subcategories
+    )
+      ? activeService.subcategories
+      : [];
 
     return (
       <ServiceDetail
         title={activeService.title}
         tagline={staticContent?.tagline}
+        subcategories={subcategories}
         description={activeService.description}
         paragraphs={
           staticContent?.paragraphs ||
