@@ -908,6 +908,12 @@
   font-weight: 800;
 }
 
+.service-icon-img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
 .service-icon {
   width: 52px;
   height: 52px;

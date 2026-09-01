@@ -7,11 +7,6 @@ import connectDB from "./config/db.js";
 import User from "./models/User.js";
 
 import authRoutes from "./routes/authRoutes.js";
-import contactRoutes from "./routes/contactRoutes.js";
-import articleRoutes from "./routes/articleRoutes.js";
-import galleryRoutes from "./routes/galleryRoutes.js";
-import eventRoutes from "./routes/eventRoutes.js";
-import adminRoutes from "./routes/adminRoutes.js";
 import contentRoutes from "./routes/contentRoutes.js";
 import mailerRoutes from "./routes/mailerRoutes.js";
 
@@ -111,31 +106,6 @@ app.get("/api/health", (req, res) => {
 app.use(
   "/api/auth",
   authRoutes
-);
-
-app.use(
-  "/api/contact",
-  contactRoutes
-);
-
-app.use(
-  "/api/articles",
-  articleRoutes
-);
-
-app.use(
-  "/api/gallery",
-  galleryRoutes
-);
-
-app.use(
-  "/api/events",
-  eventRoutes
-);
-
-app.use(
-  "/api/admin",
-  adminRoutes
 );
 
 app.use(

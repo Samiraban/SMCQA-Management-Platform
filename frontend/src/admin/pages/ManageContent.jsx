@@ -3,6 +3,8 @@ import {
   useState,
 } from "react";
 
+import { Upload } from "lucide-react";
+
 import {
   useCollection,
 } from "../../lib/useRealtime.js";
@@ -11,10 +13,13 @@ import {
   saveSiteContent,
 } from "../../lib/api.js";
 
+import { fileToImageDataUrl } from "../../lib/imageFile.js";
+
 const EMPTY_CONTENT = {
   heroTitle: "",
   heroSubtitle: "",
   aboutText: "",
+  servicesBackgroundImage: "",
   stats: {
     peopleRecruited: "",
     happyClients: "",
@@ -46,6 +51,9 @@ function ManageContent() {
   const [saving, setSaving] =
     useState(false);
 
+  const [uploading, setUploading] =
+    useState(false);
+
   useEffect(() => {
     setForm({
       ...EMPTY_CONTENT,
@@ -65,6 +73,34 @@ function ManageContent() {
         [key]: value,
       },
     }));
+  }
+
+  async function handleBackgroundUpload(fileList) {
+    const file = fileList?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setError("");
+    setUploading(true);
+
+    try {
+      const dataUrl = await fileToImageDataUrl(file, {
+        maxSize: 2000,
+        quality: 0.82,
+      });
+
+      setForm((current) => ({
+        ...current,
+        servicesBackgroundImage: dataUrl,
+      }));
+    } catch (uploadError) {
+      console.error("Background image upload failed:", uploadError);
+      setError(uploadError.message || "Unable to use that image.");
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function handleSubmit(e) {
@@ -178,6 +214,75 @@ function ManageContent() {
             }
             disabled={saving}
           />
+        </div>
+
+        <div>
+          <label>
+            "Workforce solutions for growing industries" section
+            background image
+          </label>
+
+          <div className="admin-image-field">
+            <input
+              type="text"
+              placeholder="https://example.com/photo.jpg"
+              value={form.servicesBackgroundImage || ""}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  servicesBackgroundImage: e.target.value,
+                })
+              }
+              disabled={saving}
+            />
+
+            <label
+              className={`btn-upload${uploading ? " is-busy" : ""}`}
+            >
+              <Upload size={14} />
+              {uploading ? "Uploading…" : "Upload"}
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                disabled={saving || uploading}
+                onChange={(e) => {
+                  handleBackgroundUpload(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+            </label>
+
+            {form.servicesBackgroundImage ? (
+              <img
+                src={form.servicesBackgroundImage}
+                alt="Preview"
+                className="admin-image-preview"
+              />
+            ) : (
+              <div className="admin-image-preview admin-image-preview-empty">
+                No photo yet
+              </div>
+            )}
+          </div>
+
+          <small className="admin-field-hint">
+            Shown behind the "OUR SERVICES" section on the homepage. Leave
+            blank to keep it plain white.
+          </small>
+
+          {form.servicesBackgroundImage && (
+            <button
+              type="button"
+              className="admin-inline-link"
+              onClick={() =>
+                setForm({ ...form, servicesBackgroundImage: "" })
+              }
+              disabled={saving}
+            >
+              Remove background image
+            </button>
+          )}
         </div>
 
         <h3 style={{ margin: "8px 0 0" }}>

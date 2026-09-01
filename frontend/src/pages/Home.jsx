@@ -21,6 +21,8 @@ import {
 } from "lucide-react";
 import * as Icons from "lucide-react";
 
+import { isImageSource } from "../lib/imageFile.js";
+
 import "../styles/Home.css";
 
 /*
@@ -663,6 +665,15 @@ function Home() {
       <section
         className="services-section section reveal-onscroll"
         id="services"
+        style={
+          siteContent?.servicesBackgroundImage
+            ? {
+                backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.93), rgba(255, 255, 255, 0.93)), url(${siteContent.servicesBackgroundImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }
+            : undefined
+        }
       >
         <div className="container">
           <div className="section-heading-row">
@@ -683,6 +694,9 @@ function Home() {
 
           <div className="services-grid reveal-group">
             {services.map((service) => {
+              const hasImageIcon =
+                isImageSource(service.icon);
+
               const Icon =
                 Icons[service.icon] || Building2;
 
@@ -695,7 +709,15 @@ function Home() {
                     <span>{service.number}</span>
 
                     <div className="service-icon">
-                      <Icon size={25} strokeWidth={1.7} />
+                      {hasImageIcon ? (
+                        <img
+                          src={service.icon}
+                          alt=""
+                          className="service-icon-img"
+                        />
+                      ) : (
+                        <Icon size={25} strokeWidth={1.7} />
+                      )}
                     </div>
                   </div>
 
