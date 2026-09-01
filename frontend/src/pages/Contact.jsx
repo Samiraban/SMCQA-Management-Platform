@@ -24,6 +24,7 @@ function Contact() {
   const {
     handleClick: handleEmailClick,
     copied: emailCopied,
+    href: emailHref,
   } = useMailtoFeedback("info@smcqa.com");
 
   async function handleSubmit(e) {
@@ -109,7 +110,9 @@ function Contact() {
                 <div className="contact2-locate-label">Mail Us</div>
                 <p>
                   <a
-                    href="mailto:info@smcqa.com"
+                    href={emailHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={handleEmailClick}
                     title={
                       emailCopied

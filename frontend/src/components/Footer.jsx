@@ -18,6 +18,7 @@ function Footer() {
   const {
     handleClick: handleEmailClick,
     copied: emailCopied,
+    href: emailHref,
   } = useMailtoFeedback("info@smcqa.com");
 
   return (
@@ -78,7 +79,9 @@ function Footer() {
             </a>
             <a
               className="footer-contact-item"
-              href="mailto:info@smcqa.com"
+              href={emailHref}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={handleEmailClick}
               title={
                 emailCopied

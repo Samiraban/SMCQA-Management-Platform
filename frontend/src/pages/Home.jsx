@@ -370,6 +370,7 @@ function Home() {
   const {
     handleClick: handleEmailClick,
     copied: emailCopied,
+    href: emailHref,
   } = useMailtoFeedback("info@smcqa.com");
 
   const stats = siteContent?.stats || {};
@@ -1160,7 +1161,9 @@ function Home() {
                 <div>
                   <span>EMAIL</span>
                   <a
-                    href="mailto:info@smcqa.com"
+                    href={emailHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={handleEmailClick}
                     title={
                       emailCopied

@@ -57,6 +57,7 @@ function Navbar() {
   const {
     handleClick: handleEmailClick,
     copied: emailCopied,
+    href: emailHref,
   } = useMailtoFeedback("info@smcqa.com");
 
   // Forces the PDF to actually download instead of opening in a new tab.
@@ -106,7 +107,9 @@ function Navbar() {
             </a>
 
             <a
-              href="mailto:info@smcqa.com"
+              href={emailHref}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={handleEmailClick}
               title={
                 emailCopied

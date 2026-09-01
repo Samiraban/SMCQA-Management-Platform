@@ -1,20 +1,36 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
- * Gives a mailto: link a graceful fallback.
+ * Builds a Gmail web-compose URL pre-filled with a recipient, so
+ * clicking "Email us" opens Gmail directly in a new tab with
+ * "To: info@smcqa.com" already set — instead of relying on a
+ * mailto: link, which only works if the visitor's device/browser
+ * has a default email app configured.
+ */
+export function buildGmailComposeUrl(address, subject = "") {
+  const params = new URLSearchParams({
+    view: "cm",
+    fs: "1",
+    to: address,
+  });
+
+  if (subject) {
+    params.set("su", subject);
+  }
+
+  return `https://mail.google.com/mail/?${params.toString()}`;
+}
+
+/**
+ * Gives an "Email us" link Gmail-direct behavior plus a graceful
+ * fallback. `href` points straight to Gmail's compose screen with
+ * the recipient already filled in (opened in a new tab), so it
+ * works the same for every visitor regardless of what mail app —
+ * if any — is set as their system default.
  *
- * A plain `<a href="mailto:...">` only does something if the visitor's
- * device/browser has a default email app configured (Outlook, Mail,
- * Gmail set as the browser's handler, etc). If none is set, clicking
- * the link silently does nothing and it looks "broken" — even though
- * the link itself is correct.
- *
- * This hook copies the address to the clipboard on click and returns
- * a `copied` flag you can use to show a brief confirmation (e.g. swap
- * the label to "Copied!" for a couple of seconds), so visitors always
- * get *some* visible result and can paste the address themselves.
- * It never calls preventDefault, so the normal mailto: attempt still
- * happens first — this is just a safety net for when that fails.
+ * `handleClick` also copies the address to the clipboard and
+ * `copied` flips true briefly, so you can show a "Copied!" label —
+ * useful as a backup if a visitor's browser blocks the new tab.
  */
 export function useMailtoFeedback(address, timeout = 2500) {
   const [copied, setCopied] = useState(false);
@@ -44,5 +60,9 @@ export function useMailtoFeedback(address, timeout = 2500) {
     }, timeout);
   }, [address, timeout]);
 
-  return { handleClick, copied };
+  return {
+    handleClick,
+    copied,
+    href: buildGmailComposeUrl(address),
+  };
 }

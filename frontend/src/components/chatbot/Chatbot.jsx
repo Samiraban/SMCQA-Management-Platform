@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { createChatMessage } from "../../lib/api.js";
 import { useCollection } from "../../lib/useRealtime.js";
+import { buildGmailComposeUrl } from "../../lib/useMailtoFeedback.js";
 import "./Chatbot.css";
 
 const QUICK_REPLIES = [
@@ -66,11 +67,12 @@ function Chatbot() {
   }
 
   function emailUs(e) {
-    // Let the mailto: link still try to open the user's default mail app —
-    // we don't preventDefault. But since that silently does nothing on
-    // machines with no mail client configured, we also copy the address
-    // to the clipboard and confirm it right in the chat, so there's always
-    // a way to get in touch either way.
+    // Opens Gmail's web compose directly with "To: info@smcqa.com"
+    // already filled in — works the same for every visitor, instead
+    // of relying on a mailto: link and whatever mail app (if any) is
+    // set as their system default. We also copy the address to the
+    // clipboard and confirm it right in the chat as a backup in case
+    // the new tab gets blocked.
     const address = "info@smcqa.com";
 
     if (navigator.clipboard?.writeText) {
@@ -81,7 +83,7 @@ function Chatbot() {
       ...prev,
       {
         from: "bot",
-        text: `Opening your email app now — if nothing happens, our email is ${address}. I've copied it to your clipboard so you can paste it anywhere.`,
+        text: `Opening Gmail with our address filled in — if nothing happens, our email is ${address}. I've copied it to your clipboard so you can paste it anywhere.`,
       },
     ]);
     setStage("chat");
@@ -125,7 +127,12 @@ function Chatbot() {
                   <a href="tel:+97466310125">
                     <Phone size={14} /> Call us
                   </a>
-                  <a href="mailto:info@smcqa.com" onClick={emailUs}>
+                  <a
+                    href={buildGmailComposeUrl("info@smcqa.com")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={emailUs}
+                  >
                     <Mail size={14} /> Email us
                   </a>
                 </div>
